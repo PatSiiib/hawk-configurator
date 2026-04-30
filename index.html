@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HAWK PRO - Dashboard Configurator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #f0f4f8; padding: 30px; display: flex; justify-content: center; color: #2d3748; }
+        .main-wrapper { display: flex; gap: 25px; max-width: 1450px; width: 100%; align-items: flex-start; }
+        
+        /* Column Styling - Optimized Widths */
+        .col-inputs { width: 360px; background: white; padding: 25px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); flex-shrink: 0; }
+        .col-preview { flex-grow: 1; background: white; padding: 35px; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); min-width: 650px; }
+        
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 11px; color: #718096; text-transform: uppercase; letter-spacing: 0.05em; }
+        
+        /* Fixed Width and Appealing Height for Text Boxes */
+        select, input { 
+            width: 100%; 
+            height: 45px; /* Unified height for better appeal */
+            padding: 0 15px; 
+            border: 2px solid #edf2f7; 
+            border-radius: 10px; 
+            box-sizing: border-box; 
+            font-size: 14px; 
+            transition: all 0.2s ease;
+            background-color: #f8fafc;
+        }
+        select:focus, input:focus { outline: none; border-color: #0056b3; background-color: #fff; box-shadow: 0 0 0 4px rgba(0, 86, 179, 0.1); }
+        
+        .section-title { font-size: 16px; font-weight: 800; color: #2b6cb0; margin: 0 0 20px 0; border-bottom: 3px solid #ebf8ff; padding-bottom: 10px; }
+        
+        /* Main Export Button */
+        button.main-btn { background: linear-gradient(135deg, #0056b3 0%, #003d82 100%); color: white; border: none; height: 55px; cursor: pointer; width: 100%; border-radius: 12px; font-size: 16px; margin-top: 10px; font-weight: bold; box-shadow: 0 4px 15px rgba(0, 86, 179, 0.3); transition: transform 0.2s, box-shadow 0.2s; }
+        button.main-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 86, 179, 0.4); }
+
+        /* Preview Table Styles */
+        .summary-table { width: 100%; border: 2px solid #1a202c; border-collapse: collapse; background: #fff; table-layout: fixed; margin-top: 15px; overflow: hidden; border-radius: 8px; }
+        .summary-table td { border: 2px solid #1a202c; padding: 20px; vertical-align: middle; }
+        .row-label { width: 25%; font-weight: 900; font-size: 22px; text-align: center; background: #f7fafc; color: #1a202c; }
+        .row-desc { width: 55%; font-size: 13px; line-height: 1.6; color: #4a5568; }
+        .row-price { width: 20%; font-weight: 800; font-size: 20px; text-align: center; color: #2d3748; }
+        .grand-total-row { background: #2d3748; color: #fff; font-weight: bold; text-align: right; }
+        .grand-total-row td { border-color: #1a202c; color: white !important; }
+
+        /* Boxes */
+        .raid-result-box { margin-top: 25px; border: 2px solid #38a169; padding: 20px; border-radius: 12px; background: #f0fff4; color: #2f855a; }
+        .calc-result-box { margin-top: 25px; background: #004b63; color: white; padding: 30px; border-radius: 12px; text-align: center; box-shadow: 0 10px 20px rgba(0,75,99,0.2); }
+        .calc-title { font-size: 20px; font-weight: 800; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        #calcStatus { font-size: 11px; color: #a0aec0; font-style: italic; margin-top: 15px; display: block; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="main-wrapper">
+    <div class="col-inputs">
+        <div class="section-title">1. System Hardware</div>
+        <div class="input-group">
+            <label>Model Series</label>
+            <select id="modelSelect" onchange="calculate()">
+                <option value="HAWK8">HAWK8</option><option value="HAWK16">HAWK16</option>
+                <option value="HAWK32" selected>HAWK32</option><option value="HAWK64">HAWK64</option><option value="HAWK128">HAWK128</option>
+            </select>
+        </div>
+        <div class="input-group"><label>Client Name</label><input type="text" id="clientName" placeholder="Client Name" oninput="updateLabels()"></div>
+        <div class="input-group"><label>Processor (CPU)</label>
+            <select id="cpu" onchange="calculate()">
+                <option value="Intel Ultra 5">Intel Ultra 5</option>
+                <option value="Intel Ultra 7">Intel Ultra 7</option>
+                <option value="Intel Ultra 9">Intel Ultra 9</option>
+            </select>
+        </div>
+        <div class="input-group"><label>Memory (RAM)</label>
+            <select id="ramSelect" onchange="calculate()">
+                <option value="Memory (RAM) 16GB">16GB DDR5</option>
+                <option value="Memory (RAM) 32GB">32GB DDR5</option>
+				<option value="Memory (RAM) 64GB">64GB DDR5</option>
+            </select>
+        </div>
+        <div class="input-group"><label>Drive Bays</label>
+            <select id="bays" onchange="calculate()">
+                <option value="5 HDD Bay">5 HDD Bay</option><option value="3 HDD Bay">3 HDD Bay</option>
+            </select>
+        </div>
+        <div class="input-group"><label>GPU</label>
+            <select id="gpu" onchange="calculate()">
+                <option value="NVIDIA RTX2000ADA">RTX2000ADA 16GB</option><option value="None">Integrated</option>
+            </select>
+        </div>
+        <button class="main-btn" onclick="downloadPDF()">Export Full Quote</button>
+        <span id="calcStatus">Standby</span>
+    </div>
+
+    <div class="col-inputs">
+        <div class="section-title">2. RAID Calculator</div>
+        <div class="input-group"><label>Number of Disks</label><input type="number" id="raidDisks" value="4" oninput="calculate()"></div>
+        <div class="input-group"><label>Single Disk Size (TB)</label><input type="number" id="raidSize" value="8" oninput="calculate()"></div>
+        <div class="input-group"><label>RAID Type</label>
+            <select id="raidType" onchange="calculate()">
+                <option value="0">RAID 0</option><option value="1">RAID 1</option>
+                <option value="5">RAID 5</option><option value="6">RAID 6</option>
+                <option value="10" selected>RAID 10</option>
+            </select>
+        </div>
+
+        <div class="section-title">3. Storage Calculation</div>
+        <div class="input-group"><label>Archive Input (TB)</label><input type="number" step="0.01" id="calcArchive" value="22.25" oninput="updateLabels()"></div>
+        <div class="input-group"><label>Metadata Input (GB)</label><input type="number" step="0.01" id="calcMeta" value="649.20" oninput="updateLabels()"></div>
+    </div>
+
+    <div class="col-preview">
+        <h2 style="margin-top:0; font-size: 24px; font-weight: 800;">Live Quote Preview</h2>
+        
+        <table class="summary-table">
+            <tr>
+                <td class="row-label" id="prevModel">HAWK32</td>
+                <td class="row-desc" id="prevSpec">Initialising...</td>
+                <td class="row-price" id="prevBasePrice">$0.00</td>
+            </tr>
+            <tr>
+                <td class="row-label">STORAGE</td>
+                <td class="row-desc" id="prevDriveSpec">4 x 8TB Hard Drives</td>
+                <td class="row-price" id="prevDrivePrice">$0.00</td>
+            </tr>
+            <tr class="grand-total-row">
+                <td colspan="2" style="padding-right:20px; font-size: 16px;">GRAND TOTAL</td>
+                <td class="row-price" id="prevGrandTotal" style="color: white !important;">$0.00</td>
+            </tr>
+        </table>
+
+        <div class="raid-result-box">
+            <div style="font-weight:800; font-size: 16px; margin-bottom:8px;">RAID Summary: <span id="raidLabelTop">RAID 10</span></div>
+            <div style="font-size:14px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div>Usable Capacity: <span id="raidCap" style="font-weight:bold;">16.0 TB</span></div>
+                <div style="text-align: right;">Fault Tolerance: <span style="font-weight:bold;">1 drive</span> failure</div>
+            </div>
+        </div>
+
+        <div class="calc-result-box">
+            <div class="calc-title">Result of Calculation</div>
+            <div style="font-size:16px;">Total Archive: <span id="dispArchive" style="font-weight:bold; font-size: 20px;">22.25</span> TB</div>
+            <div style="font-size:12px; opacity:0.8; margin-top: 4px;">HDD Marked Capacity: <span id="dispArchiveMark">24.47</span> TB</div>
+            <div style="font-size:16px; margin-top:20px;">Metadata SSD: <span id="dispMeta" style="font-weight:bold; font-size: 20px;">649.20</span> GB</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbwJqgD055NpX82eY0F1kKTsI_4vLBVZFZrKvJR5MFbB926XIDrGfmzza8PshLtLvMwo/exec";
+    
+    window.serverPriceFinal = 0;
+    window.drivePriceFinal = 0;
+    window.unitPriceRaw = 0;
+
+    function updateRAID() {
+        const n = parseInt(document.getElementById('raidDisks').value) || 0;
+        const s = parseFloat(document.getElementById('raidSize').value) || 0;
+        const type = document.getElementById('raidType').value;
+        let cap = (type === "10") ? (n / 2) * s : (n - 1) * s; 
+        document.getElementById('raidCap').innerText = cap.toFixed(1) + " TB";
+        document.getElementById('raidLabelTop').innerText = "RAID " + type;
+    }
+
+    function updateLabels() {
+        const n = document.getElementById('raidDisks').value;
+        const s = document.getElementById('raidSize').value;
+        const cpu = document.getElementById('cpu').value.replace('Intel ', '');
+        const ram = document.getElementById('ramSelect').options[document.getElementById('ramSelect').selectedIndex].text;
+        const gpu = document.getElementById('gpu').value;
+        const bay = document.getElementById('bays').value;
+
+        document.getElementById('prevModel').innerText = document.getElementById('modelSelect').value;
+        document.getElementById('prevSpec').innerText = `${cpu} CPU, ${ram}, 1TB OS, 1TB Metadata, RAID 10 (${n}x${s}TB), ${bay}, ${gpu}, Win 11 Pro & NetFlow Ready`;
+        document.getElementById('prevDriveSpec').innerText = `${n} x ${s}TB Hard Drives ($${window.unitPriceRaw.toLocaleString(undefined, {minimumFractionDigits: 2})} each)`;
+
+        const arch = parseFloat(document.getElementById('calcArchive').value) || 0;
+        document.getElementById('dispArchive').innerText = arch.toFixed(2);
+        document.getElementById('dispArchiveMark').innerText = (arch * 1.0997).toFixed(2);
+        document.getElementById('dispMeta').innerText = document.getElementById('calcMeta').value;
+    }
+
+    function callback(data) {
+        const n = parseInt(document.getElementById('raidDisks').value) || 0;
+        const markup = data.markup || 1.30;
+        
+        window.serverPriceFinal = data.serverBasePrice * markup;
+        window.unitPriceRaw = data.driveUnitPrice; 
+        window.drivePriceFinal = window.unitPriceRaw * n;
+
+        document.getElementById('prevBasePrice').innerText = "$" + window.serverPriceFinal.toLocaleString(undefined, {minimumFractionDigits: 2});
+        document.getElementById('prevDrivePrice').innerText = "$" + window.drivePriceFinal.toLocaleString(undefined, {minimumFractionDigits: 2});
+        
+        const grandTotal = window.serverPriceFinal + window.drivePriceFinal;
+        document.getElementById('prevGrandTotal').innerText = "$" + grandTotal.toLocaleString(undefined, {minimumFractionDigits: 2});
+        
+        document.getElementById('calcStatus').innerText = "Updated";
+        updateLabels();
+    }
+
+    function calculate() {
+        updateRAID();
+        document.getElementById('calcStatus').innerText = "Calculating...";
+        const params = { 
+            cpu: document.getElementById('cpu').value, ram: document.getElementById('ramSelect').value,
+            gpu: document.getElementById('gpu').value, bay: document.getElementById('bays').value,
+            driveQty: document.getElementById('raidDisks').value, driveSize: document.getElementById('raidSize').value,
+            callback: "callback" 
+        };
+        const script = document.createElement('script');
+        script.src = webAppUrl + "?" + new URLSearchParams(params).toString() + "&t=" + new Date().getTime();
+        document.body.appendChild(script);
+    }
+
+    function downloadPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const client = document.getElementById('clientName').value || "Client";
+        const n = document.getElementById('raidDisks').value;
+        const s = document.getElementById('raidSize').value;
+
+        doc.setFont("helvetica", "bold").setFontSize(22).text("OFFICIAL HAWK SERVER QUOTE", 14, 20);
+        doc.setFontSize(10).text(`Client: ${client}`, 14, 28);
+        doc.setFont("helvetica", "normal").text(`Date: ${new Date().toLocaleDateString()}`, 160, 28);
+
+        doc.setFontSize(12).text(`${s}TB = $${window.unitPriceRaw.toLocaleString(undefined,{minimumFractionDigits:2})} each`, 14, 40);
+        doc.setFont("helvetica", "bold").text(`${n} x ${s}TB = $${window.drivePriceFinal.toLocaleString(undefined,{minimumFractionDigits:2})}`, 14, 47);
+
+        doc.setLineWidth(0.5).rect(14, 52, 182, 60);
+        doc.line(14, 72, 196, 72); doc.line(14, 92, 196, 92);
+        doc.line(65, 52, 65, 112); doc.line(155, 52, 155, 112);
+
+        doc.setFontSize(14).text(document.getElementById('prevModel').innerText, 18, 65);
+        doc.setFontSize(8).setFont("helvetica", "normal").text(doc.splitTextToSize(document.getElementById('prevSpec').innerText, 85), 68, 58);
+        doc.setFont("helvetica", "bold").setFontSize(12).text("$" + window.serverPriceFinal.toLocaleString(undefined,{minimumFractionDigits:2}), 158, 65);
+
+        doc.text("STORAGE", 18, 85);
+        doc.setFont("helvetica", "normal").setFontSize(10).text(document.getElementById('prevDriveSpec').innerText, 68, 85);
+        doc.setFont("helvetica", "bold").setFontSize(12).text("$" + window.drivePriceFinal.toLocaleString(undefined,{minimumFractionDigits:2}), 158, 85);
+
+        doc.text("GRAND TOTAL", 110, 105);
+        doc.text(document.getElementById('prevGrandTotal').innerText, 158, 105);
+
+        doc.setDrawColor(40, 167, 69).rect(14, 120, 182, 35);
+        doc.setTextColor(30, 126, 52).setFontSize(12).setFont("helvetica", "bold").text("RAID CONFIGURATION SUMMARY", 20, 130);
+        doc.setTextColor(0).setFontSize(10).setFont("helvetica", "normal");
+        doc.text(`Usable Capacity: ${document.getElementById('raidCap').innerText}`, 20, 140);
+        doc.text(`Fault Tolerance: At least 1-drive failure`, 110, 140);
+
+        doc.setFillColor(0, 75, 99).rect(14, 165, 182, 60, 'F').setTextColor(255);
+        doc.setFontSize(16).setFont("helvetica", "bold").text("RESULT OF CALCULATION", 105, 180, {align: "center"});
+        doc.setDrawColor(255).line(40, 185, 170, 185);
+        doc.setFontSize(11).setFont("helvetica", "normal").text(`Total Video Archive: ${document.getElementById('dispArchive').innerText} TB (${document.getElementById('dispArchiveMark').innerText} TB Marked)`, 105, 195, {align: "center"});
+        doc.text(`Dedicated Metadata SSD: ${document.getElementById('dispMeta').innerText} GB`, 105, 205, {align: "center"});
+
+        doc.save(`${client}_Hawk_Quote.pdf`);
+    }
+
+    calculate();
+</script>
+</body>
+</html>
