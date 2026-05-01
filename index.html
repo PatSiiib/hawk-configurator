@@ -97,8 +97,8 @@
 
     <div class="col-inputs">
         <div class="section-title">2. RAID Calculator</div>
-        <div class="input-group"><label>Number of Disks</label><input type="number" id="raidDisks" value="4" oninput="calculate()"></div>
-        <div class="input-group"><label>Single Disk Size (TB)</label><input type="number" id="raidSize" value="8" oninput="calculate()"></div>
+        <div class="input-group"><label>Number of Disks</label><input type="number" id="raidDisks" value="0" oninput="calculate()"></div>
+        <div class="input-group"><label>Single Disk Size (TB)</label><input type="number" id="raidSize" value="0" oninput="calculate()"></div>
         <div class="input-group"><label>RAID Type</label>
             <select id="raidType" onchange="calculate()">
                 <option value="0">RAID 0 (Stripe set)</option><option value="1">RAID 1 (Mirror)</option>
@@ -108,8 +108,8 @@
         </div>
 
         <div class="section-title">3. Storage Calculation</div>
-        <div class="input-group"><label>Archive Input (TB)</label><input type="number" step="0.01" id="calcArchive" value="22.25" oninput="updateLabels()"></div>
-        <div class="input-group"><label>Metadata Input (GB)</label><input type="number" step="0.01" id="calcMeta" value="649.20" oninput="updateLabels()"></div>
+        <div class="input-group"><label>Archive Input (TB)</label><input type="number" step="0.01" id="calcArchive" value="0.0" oninput="updateLabels()"></div>
+        <div class="input-group"><label>Metadata Input (GB)</label><input type="number" step="0.01" id="calcMeta" value="0.0" oninput="updateLabels()"></div>
     </div>
 
     <div class="col-preview">
