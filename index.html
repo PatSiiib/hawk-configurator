@@ -181,7 +181,7 @@
         const ram = document.getElementById('ramSelect').options[document.getElementById('ramSelect').selectedIndex].text;
         const gpu = document.getElementById('gpu').value;
         const bay = document.getElementById('bays').value;
-        const card = document.getElementById('raidCard').value === "None" ? "" : "Physical RAID Card, ";
+        const card = document.getElementById('raidCard').value === "None" ? "" : "MegaRAID 9560-8i, ";
 
         document.getElementById('prevModel').innerText = document.getElementById('modelSelect').value;
         document.getElementById('prevSpec').innerText = `${cpu}, ${ram}, 1TB OS, 1TB Metadata, ${card}RAID ${document.getElementById('raidType').value} (${n}x${s}TB), ${bay}, ${gpu}, Windows 11 Pro & NetFlow Ready`;
