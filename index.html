@@ -375,6 +375,27 @@
     doc.save(`${client}_Hawk_Quote.pdf`);
 }
     calculate();
+	// --- AUTO REFRESH LOGIC ---
+// This will trigger the calculate() function every 5 minutes (300,000 milliseconds)
+// to ensure pricing is synced with the Google Sheet.
+
+const refreshMinutes = 5; 
+const refreshInterval = refreshMinutes * 60 * 1000;
+
+setInterval(() => {
+    console.log("Auto-refreshing pricing from Google Sheets...");
+    
+    // Only refresh if the user isn't currently typing (optional safety)
+    if (document.activeElement.tagName !== 'INPUT') {
+        calculate();
+        
+        // Update the status so you can see it happened
+        const status = document.getElementById('calcStatus');
+        if (status) {
+            status.innerText = "Auto-Updated: " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+    }
+}, refreshInterval);
 </script>
 </body>
 </html>
