@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>HAWK PRO - Master Configurator</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; padding: 30px; display: flex; justify-content: center; color: #2d3748; }
         .main-wrapper { display: flex; gap: 25px; max-width: 1450px; width: 100%; align-items: flex-start; }
@@ -71,6 +72,11 @@
             </select>
         </div>
         <button class="main-btn" onclick="downloadPDF()">Export Full Quote</button>
+        <button class="main-btn" 
+        style="background: linear-gradient(135deg, #1D6F42 0%, #114B2C 100%); margin-top: 10px;" 
+        onclick="exportToExcel()">
+    Export Itemized Excel (.xlsx)
+</button>
         <span id="calcStatus" style="font-size:11px; color:#a0aec0; display:block; text-align:center; margin-top:10px;">Standby</span>
     </div>
 
@@ -190,6 +196,61 @@
         script.src = webAppUrl + "?" + new URLSearchParams(params).toString() + "&t=" + new Date().getTime();
         document.body.appendChild(script);
     }
+
+    function exportToExcel() {
+    const client = document.getElementById('clientName').value || "Client";
+    const model = document.getElementById('modelSelect').value;
+    const n = document.getElementById('raidDisks').value;
+    const s = document.getElementById('raidSize').value;
+    const cpu = document.getElementById('cpu').value;
+    const gpu = document.getElementById('gpu').value;
+    const raidType = document.getElementById('raidType').options[document.getElementById('raidType').selectedIndex].text;
+
+    // 1. Define the Data Rows matching your Google Sheet exactly
+    const data = [
+        ["SL NO", "SPECIFICATION", "QTY", "DESCRIPTION", "WatchNET Price"],
+        [1, cpu, 1, "Intel® Core™ Ultra Processor 30M Cache, up to 5.50 GHz", ""],
+        [2, "CPU Cooling FAN", 1, "Noctua CPU Cooler NH-L9i-17xx Low-profile Quiet", ""],
+        [3, document.getElementById('ramSelect').options[document.getElementById('ramSelect').selectedIndex].text, 1, "DDR5 5600MT/s Non-ECC Unbuffered DIMM CL46 1.1V", ""],
+        [4, "1 TB OS drive", 1, "Western Digital 1TB WD Blue SN5000 NVMe SSD, PCIe Gen 4.0", ""],
+        [5, "850W PSU", 1, "MSI MAG A850GL PCIE 5, 850W 80 PLUS Gold Certified", ""],
+        [6, "Core Ultra Motherboard", 1, "ASUS PRIME Z890M-PLUS WIFI Z890 LGA 1851", ""],
+        [7, "4U Rack Case", 1, "Chenbro RM42300H02*15326 4U", ""],
+        [8, document.getElementById('bays').value, 1, "SATA hot-swap hard drive bays.", ""],
+        [9, "Windows 11 Pro", 1, "Windows 11 PRO 64BIT ENGLISH 1PK DSP OEI DVD", ""],
+        [10, "nic card", 1, "TP-Link (TX201) 2.5 Gigabit PCIe Network Adapter", ""],
+        [11, "1 TB Metadata drive", 1, "Western Digital 1TB WD Blue SN5000 NVMe SSD", ""],
+        [12, gpu, 1, gpu === "None" ? "Integrated Graphics" : "PNY NVIDIA RTX Ada Generation Professional Graphics Card", ""],
+        [13, "Case Fan", 2, "StarTech.com 80x25mm Dual Ball Bearing Computer Case Fan", ""],
+        [14, "Broadcom MegaRAID", 1, "9560-8i Storage controller (RAID) - SATA/SAS/NVMe", ""],
+        [15, "Raid Cables", 1, "Slim Line SAS4.0 SFF-8654 8i to SATA 8 Ports", ""],
+        ["", "", "", "", ""], // Spacer
+        ["", "Cost to build", "", "Professional System Integration & Stress Testing", ""],
+        ["", "Extended warranty", "", "2 years extended parts and labour", ""],
+        ["", "Warranty", "", "1yr parts 3yrs labour", ""],
+        ["", "miscellaneous", "", "Shipping and handling / small parts", ""],
+        // UPDATED: This now only pulls the HAWK Server price, NOT including Storage
+        ["", "TOTAL (3 Years Parts & labour)", "", "", document.getElementById('prevBasePrice').innerText]
+    ];
+
+    // 2. Initialize Workbook and Sheet
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(data);
+
+    // 3. Formatting: Set Column Widths
+    const wscols = [
+        {wch: 8},  // SL NO
+        {wch: 30}, // SPECIFICATION
+        {wch: 8},  // QTY
+        {wch: 75}, // DESCRIPTION
+        {wch: 20}  // WatchNET Price
+    ];
+    ws['!cols'] = wscols;
+
+    // 4. Download the file
+    XLSX.utils.book_append_sheet(wb, ws, model);
+    XLSX.writeFile(wb, `${client}_${model}_Quote.xlsx`);
+}
 
     function downloadPDF() {
         const { jsPDF } = window.jspdf;
