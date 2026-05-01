@@ -160,9 +160,60 @@
         const n = parseInt(document.getElementById('raidDisks').value) || 0;
         const s = parseFloat(document.getElementById('raidSize').value) || 0;
         const type = document.getElementById('raidType').value;
-        let cap = (type === "10") ? (n / 2) * s : (n - 1) * s; 
+        
+        let cap = 0; 
+        let fault = ""; 
+        let rSpeed = ""; 
+        let wSpeed = "";
+
+        // RAID Calculation Logic
+        if (type === "0") { 
+            cap = n * s; 
+            fault = "0 drives (No Redundancy)"; 
+            rSpeed = n + "x"; 
+            wSpeed = n + "x"; 
+        }
+        else if (type === "1") { 
+            cap = s; // Mirroring: capacity of only 1 drive
+            fault = (n - 1) + " drive(s)"; 
+            rSpeed = n + "x"; 
+            wSpeed = "1x"; 
+        }
+        else if (type === "5") { 
+            cap = (n > 2) ? (n - 1) * s : 0; // Minimum 3 drives
+            fault = (n > 2) ? "1 drive" : "N/A (Min 3 disks)"; 
+            rSpeed = (n - 1) + "x"; 
+            wSpeed = "Approx 1x"; 
+        }
+        else if (type === "6") { 
+            cap = (n > 3) ? (n - 2) * s : 0; // Minimum 4 drives
+            fault = (n > 3) ? "2 drives" : "N/A (Min 4 disks)"; 
+            rSpeed = (n - 2) + "x"; 
+            wSpeed = "Approx 1x"; 
+        }
+        else if (type === "10") { 
+            cap = (n >= 4) ? (n / 2) * s : 0; // Minimum 4 drives (Must be even)
+            fault = (n >= 4) ? "1 drive per mirror set" : "N/A (Min 4 disks)"; 
+            rSpeed = n + "x"; 
+            wSpeed = (n / 2) + "x"; 
+        }
+
+        // Update the Dashboard UI
         document.getElementById('raidCap').innerText = cap.toFixed(1) + " TB";
         document.getElementById('raidLabelTop').innerText = "RAID " + type;
+        
+        // Update the RAID Summary box with detailed info
+        const raidDetails = document.getElementById('raidDetails');
+        if(raidDetails) {
+            document.getElementById('dispRaidDiskCount').innerText = n;
+            // Note: If you want to show speed and fault on the dashboard
+            // ensure the corresponding span IDs exist in your HTML
+            const faultSpan = document.getElementById('raidFault');
+            if(faultSpan) faultSpan.innerText = fault;
+        }
+
+        // Keep the Archive sync updated
+        updateLabels();
     }
 
     function updateLabels() {
