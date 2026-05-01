@@ -2,38 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>HAWK PRO - Dashboard Configurator</title>
+    <title>HAWK PRO - Master Configurator</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #f0f4f8; padding: 30px; display: flex; justify-content: center; color: #2d3748; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; padding: 30px; display: flex; justify-content: center; color: #2d3748; }
         .main-wrapper { display: flex; gap: 25px; max-width: 1450px; width: 100%; align-items: flex-start; }
-        
-        .col-inputs { width: 360px; background: white; padding: 25px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); flex-shrink: 0; }
+        .col-inputs { width: 360px; background: white; padding: 25px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); flex-shrink: 0; }
         .col-preview { flex-grow: 1; background: white; padding: 35px; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); min-width: 650px; }
-        
         .input-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 11px; color: #718096; text-transform: uppercase; letter-spacing: 0.05em; }
-        
-        select, input { width: 100%; height: 45px; padding: 0 15px; border: 2px solid #edf2f7; border-radius: 10px; box-sizing: border-box; font-size: 14px; transition: all 0.2s ease; background-color: #f8fafc; }
-        select:focus, input:focus { outline: none; border-color: #0056b3; background-color: #fff; box-shadow: 0 0 0 4px rgba(0, 86, 179, 0.1); }
-        
-        .section-title { font-size: 16px; font-weight: 800; color: #2b6cb0; margin: 0 0 20px 0; border-bottom: 3px solid #ebf8ff; padding-bottom: 10px; }
-        
-        button.main-btn { background: linear-gradient(135deg, #0056b3 0%, #003d82 100%); color: white; border: none; height: 55px; cursor: pointer; width: 100%; border-radius: 12px; font-size: 16px; margin-top: 10px; font-weight: bold; box-shadow: 0 4px 15px rgba(0, 86, 179, 0.3); transition: transform 0.2s, box-shadow 0.2s; }
-        button.main-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 86, 179, 0.4); }
-
-        .summary-table { width: 100%; border: 2px solid #1a202c; border-collapse: collapse; background: #fff; table-layout: fixed; margin-top: 15px; overflow: hidden; border-radius: 8px; }
+        label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 11px; color: #718096; text-transform: uppercase; }
+        select, input { width: 100%; height: 45px; padding: 0 15px; border: 2px solid #edf2f7; border-radius: 10px; box-sizing: border-box; font-size: 14px; background-color: #f8fafc; }
+        .section-title { font-size: 16px; font-weight: 800; color: #2b6cb0; margin-bottom: 20px; border-bottom: 3px solid #ebf8ff; padding-bottom: 10px; }
+        button.main-btn { background: linear-gradient(135deg, #0056b3 0%, #003d82 100%); color: white; border: none; height: 55px; cursor: pointer; width: 100%; border-radius: 12px; font-size: 16px; font-weight: bold; margin-top: 10px; }
+        .summary-table { width: 100%; border: 2px solid #1a202c; border-collapse: collapse; background: #fff; table-layout: fixed; margin-top: 15px; }
         .summary-table td { border: 2px solid #1a202c; padding: 20px; vertical-align: middle; }
-        .row-label { width: 25%; font-weight: 900; font-size: 22px; text-align: center; background: #f7fafc; color: #1a202c; }
-        .row-desc { width: 55%; font-size: 13px; line-height: 1.6; color: #4a5568; }
-        .row-price { width: 20%; font-weight: 800; font-size: 20px; text-align: center; color: #2d3748; }
-        .grand-total-row { background: #2d3748; color: #fff; font-weight: bold; text-align: right; }
-        .grand-total-row td { border-color: #1a202c; color: white !important; }
-
+        .row-label { width: 25%; font-weight: 900; font-size: 22px; text-align: center; background: #f7fafc; }
+        .row-price { width: 20%; font-weight: 800; font-size: 20px; text-align: center; }
+        .grand-total-row { background: #2d3748; color: #fff; }
         .raid-result-box { margin-top: 25px; border: 2px solid #38a169; padding: 20px; border-radius: 12px; background: #f0fff4; color: #2f855a; }
-        .calc-result-box { margin-top: 25px; background: #004b63; color: white; padding: 30px; border-radius: 12px; text-align: center; box-shadow: 0 10px 20px rgba(0,75,99,0.2); }
-        .calc-title { font-size: 20px; font-weight: 800; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
-        #calcStatus { font-size: 11px; color: #a0aec0; font-style: italic; margin-top: 15px; display: block; text-align: center; }
+        .calc-result-box { margin-top: 25px; background: #004b63; color: white; padding: 30px; border-radius: 12px; text-align: center; }
     </style>
 </head>
 <body>
@@ -46,7 +33,6 @@
             <select id="modelSelect" onchange="calculate()">
                 <option value="HAWK8">HAWK8</option><option value="HAWK16">HAWK16</option>
                 <option value="HAWK32" selected>HAWK32</option><option value="HAWK64">HAWK64</option>
-                <option value="HAWK128">HAWK128</option>
             </select>
         </div>
         <div class="input-group"><label>Client Name</label><input type="text" id="clientName" placeholder="Client Name" oninput="updateLabels()"></div>
@@ -65,12 +51,12 @@
             </select>
         </div>
         <div class="input-group">
-			<label>RAID Controller</label>
-			<select id="raidCard" onchange="calculate()">
-				<option value="RAID Controller">With RAID Card</option>
-				<option value="None" selected>No RAID Card</option>
-			</select>
-		</div>
+            <label>RAID Controller</label>
+            <select id="raidCard" onchange="calculate()">
+                <option value="RAID Controller">With RAID Card</option>
+                <option value="None" selected>No RAID Card</option>
+            </select>
+        </div>
         <div class="input-group"><label>Drive Bays</label>
             <select id="bays" onchange="calculate()">
                 <option value="3 HDD Bay">3 HDD Bay</option>
@@ -85,7 +71,7 @@
             </select>
         </div>
         <button class="main-btn" onclick="downloadPDF()">Export Full Quote</button>
-        <span id="calcStatus">Standby</span>
+        <span id="calcStatus" style="font-size:11px; color:#a0aec0; display:block; text-align:center; margin-top:10px;">Standby</span>
     </div>
 
     <div class="col-inputs">
@@ -94,90 +80,77 @@
         <div class="input-group"><label>Single Disk Size (TB)</label><input type="number" id="raidSize" value="8" oninput="calculate()"></div>
         <div class="input-group"><label>RAID Type</label>
             <select id="raidType" onchange="calculate()">
-                <option value="0">RAID 0 (Stripe)</option><option value="1">RAID 1 (Mirror)</option>
-                <option value="5">RAID 5 (Parity)</option><option value="6">RAID 6 (Double Parity)</option>
-                <option value="10" selected>RAID 10 (Mirror-stripe)</option>
+                <option value="0">RAID 0</option><option value="1">RAID 1</option>
+                <option value="5">RAID 5</option><option value="6">RAID 6</option>
+                <option value="10" selected>RAID 10</option>
             </select>
         </div>
-
         <div class="section-title">3. Storage Calculation</div>
-        <div class="input-group"><label>Archive Input (TB)</label><input type="number" step="0.01" id="calcArchive" value="22.25" oninput="updateLabels()"></div>
-        <div class="input-group"><label>Metadata Input (GB)</label><input type="number" step="0.01" id="calcMeta" value="649.20" oninput="updateLabels()"></div>
+        <div class="input-group"><label>Archive Target (TB)</label><input type="number" step="0.01" id="calcArchive" value="22.25" oninput="updateLabels()"></div>
+        <div class="input-group"><label>Metadata (GB)</label><input type="number" step="0.01" id="calcMeta" value="649.20" oninput="updateLabels()"></div>
     </div>
 
     <div class="col-preview">
-        <h2 style="margin-top:0; font-size: 24px; font-weight: 800;">Live Quote Preview</h2>
+        <h2 style="margin-top:0;">Quote Breakdown</h2>
         <table class="summary-table">
             <tr>
                 <td class="row-label" id="prevModel">HAWK32</td>
-                <td class="row-desc" id="prevSpec">Initialising...</td>
+                <td id="prevSpec" style="font-size:13px;">Initialising...</td>
                 <td class="row-price" id="prevBasePrice">$0.00</td>
             </tr>
             <tr>
                 <td class="row-label">STORAGE</td>
-                <td class="row-desc" id="prevDriveSpec">4 x 8TB Hard Drives</td>
+                <td id="prevDriveSpec" style="font-size:13px;">Drives loading...</td>
                 <td class="row-price" id="prevDrivePrice">$0.00</td>
             </tr>
             <tr class="grand-total-row">
-                <td colspan="2" style="padding-right:20px; font-size: 16px;">GRAND TOTAL</td>
-                <td class="row-price" id="prevGrandTotal" style="color: white !important;">$0.00</td>
+                <td colspan="2" style="text-align:right; padding-right:20px; font-weight:bold;">GRAND TOTAL</td>
+                <td class="row-price" id="prevGrandTotal" style="color:white;">$0.00</td>
             </tr>
         </table>
-
         <div class="raid-result-box">
-            <div style="font-weight:800; font-size: 16px; margin-bottom:8px;">RAID Summary: <span id="raidLabelTop">RAID 10</span></div>
-            <div style="font-size:14px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div>Usable Capacity: <span id="raidCap" style="font-weight:bold;">16.0 TB</span></div>
-                <div style="text-align: right;">Fault Tolerance: <span id="raidFault" style="font-weight:bold;">1 drive</span> failure</div>
-            </div>
+            <div style="font-weight:bold;">RAID Summary: <span id="raidLabelTop">RAID 10</span></div>
+            <div style="font-size:14px;">Usable Capacity: <span id="raidCap" style="font-weight:bold;">16.0 TB</span> | Fault Tolerance: <span id="raidFault" style="font-weight:bold;">1 drive</span></div>
         </div>
-
         <div class="calc-result-box">
-            <div class="calc-title">Result of Calculation</div>
-            <div style="font-size:16px;">Total Archive: <span id="dispArchive" style="font-weight:bold; font-size: 20px;">22.25</span> TB</div>
-            <div style="font-size:12px; opacity:0.8; margin-top: 4px;">HDD Marked Capacity: <span id="dispArchiveMark">24.47</span> TB</div>
-            <div style="font-size:16px; margin-top:20px;">Metadata SSD: <span id="dispMeta" style="font-weight:bold; font-size: 20px;">649.20</span> GB</div>
+            <div style="font-size:18px; font-weight:bold; margin-bottom:15px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom:10px;">Result of Calculation</div>
+            <div>Archive: <span id="dispArchive" style="font-weight:bold; font-size:20px;">22.25</span> TB (<span id="dispArchiveMark" style="font-size:12px;">24.47</span> TB Marked)</div>
+            <div style="margin-top:15px;">Metadata SSD: <span id="dispMeta" style="font-weight:bold; font-size:20px;">649.20</span> GB</div>
         </div>
     </div>
 </div>
 
 <script>
-    const webAppUrl = "https://script.google.com/macros/s/AKfycbyP4iM_qZps6vuQ5QXPWLZzSVqxrYt8nlqLckJ1v-djL40KyKX_U3cMHRz6Qi4yI18j/exec";
-    
-    window.serverPriceFinal = 0;
-    window.drivePriceFinal = 0;
-    window.unitPriceRaw = 0;
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbzQEqMYVXfbUMDAQ27H6HRUgTcjbN1KCj4X0L6oSKoxxZdt3fNyyOqmy6xc6vuW0QoT/exec";
+    window.serverPriceFinal = 0; window.drivePriceFinal = 0; window.unitPriceRaw = 0;
 
     function updateRAID() {
         const n = parseInt(document.getElementById('raidDisks').value) || 0;
         const s = parseFloat(document.getElementById('raidSize').value) || 0;
         const type = document.getElementById('raidType').value;
         let cap = 0; let fault = "";
-
         if (type === "0") { cap = n * s; fault = "None"; }
-        else if (type === "1") { cap = s; fault = (n - 1) + " drive(s)"; }
-        else if (type === "5") { cap = (n > 2) ? (n - 1) * s : 0; fault = (n > 2) ? "1 drive" : "N/A"; }
-        else if (type === "6") { cap = (n > 3) ? (n - 2) * s : 0; fault = (n > 3) ? "2 drives" : "N/A"; }
-        else if (type === "10") { cap = (n >= 4) ? (n / 2) * s : 0; fault = (n >= 4) ? "1 drive/set" : "N/A"; }
-
+        else if (type === "1") { cap = s; fault = (n-1) + " drive(s)"; }
+        else if (type === "5") { cap = (n > 2) ? (n-1)*s : 0; fault = "1 drive"; }
+        else if (type === "6") { cap = (n > 3) ? (n-2)*s : 0; fault = "2 drives"; }
+        else if (type === "10") { cap = (n >= 4) ? (n/2)*s : 0; fault = "1 drive/set"; }
         document.getElementById('raidCap').innerText = cap.toFixed(1) + " TB";
         document.getElementById('raidLabelTop').innerText = "RAID " + type;
         document.getElementById('raidFault').innerText = fault;
-        updateLabels();
     }
 
     function updateLabels() {
         const n = document.getElementById('raidDisks').value;
         const s = document.getElementById('raidSize').value;
-        const cpu = document.getElementById('cpu').value.replace('Intel ', '');
+        const cpu = document.getElementById('cpu').value;
         const ram = document.getElementById('ramSelect').options[document.getElementById('ramSelect').selectedIndex].text;
         const gpu = document.getElementById('gpu').value;
         const bay = document.getElementById('bays').value;
-        const card = document.getElementById('raidCard').value === "None" ? " " : "MegaRAID 9560-8i";
+        const card = document.getElementById('raidCard').value === "None" ? "" : "Physical RAID Card, ";
 
         document.getElementById('prevModel').innerText = document.getElementById('modelSelect').value;
-        document.getElementById('prevSpec').innerText = `${cpu} CPU, ${ram}, 1TB OS, 1TB Metadata, ${card}, RAID ${document.getElementById('raidType').value} (${n}x${s}TB), ${bay}, ${gpu}, Win 11 Pro`;
-        document.getElementById('prevDriveSpec').innerText = `${n} x ${s}TB Hard Drives ($${window.unitPriceRaw.toLocaleString(undefined, {minimumFractionDigits: 2})} each)`;
+        document.getElementById('prevSpec').innerText = `${cpu}, ${ram}, 1TB OS, 1TB Metadata, ${card}RAID ${document.getElementById('raidType').value} (${n}x${s}TB), ${bay}, ${gpu}, Win 11 Pro`;
+        document.getElementById('prevDriveSpec').innerText = `${n} x ${s}TB Hard Drives ($${window.unitPriceRaw.toLocaleString(undefined, {minimumFractionDigits:2})} each)`;
 
         const arch = parseFloat(document.getElementById('calcArchive').value) || 0;
         document.getElementById('dispArchive').innerText = arch.toFixed(2);
@@ -187,15 +160,13 @@
 
     function callback(data) {
         const n = parseInt(document.getElementById('raidDisks').value) || 0;
-        const markup = data.markup || 1.30;
-        window.serverPriceFinal = data.serverBasePrice * markup;
+        window.serverPriceFinal = data.serverBasePrice * data.markup;
         window.unitPriceRaw = data.driveUnitPrice; 
         window.drivePriceFinal = window.unitPriceRaw * n;
 
         document.getElementById('prevBasePrice').innerText = "$" + window.serverPriceFinal.toLocaleString(undefined, {minimumFractionDigits: 2});
         document.getElementById('prevDrivePrice').innerText = "$" + window.drivePriceFinal.toLocaleString(undefined, {minimumFractionDigits: 2});
-        const grandTotal = window.serverPriceFinal + window.drivePriceFinal;
-        document.getElementById('prevGrandTotal').innerText = "$" + grandTotal.toLocaleString(undefined, {minimumFractionDigits: 2});
+        document.getElementById('prevGrandTotal').innerText = "$" + (window.serverPriceFinal + window.drivePriceFinal).toLocaleString(undefined, {minimumFractionDigits: 2});
         document.getElementById('calcStatus').innerText = "Updated";
         updateLabels();
     }
@@ -204,20 +175,18 @@
         updateRAID();
         document.getElementById('calcStatus').innerText = "Calculating...";
         
-        // This gathers the data to send to Google
         const params = { 
             cpu: document.getElementById('cpu').value, 
             ram: document.getElementById('ramSelect').value,
             gpu: document.getElementById('gpu').value, 
             bay: document.getElementById('bays').value,
-            raidCard: document.getElementById('raidCard').value, // This sends "RAID Controller" or "None"
+            raidCard: document.getElementById('raidCard').value,
             driveQty: document.getElementById('raidDisks').value, 
-            driveSize: document.getElementById('raidSize').value,
+            driveSize: document.getElementById('raidSize').value, // This sends the number "8"
             callback: "callback" 
         };
         
         const script = document.createElement('script');
-        // The timestamp (new Date().getTime()) prevents the browser from using an old cached price
         script.src = webAppUrl + "?" + new URLSearchParams(params).toString() + "&t=" + new Date().getTime();
         document.body.appendChild(script);
     }
@@ -228,41 +197,75 @@
         const client = document.getElementById('clientName').value || "Client";
         const n = document.getElementById('raidDisks').value;
         const s = document.getElementById('raidSize').value;
+        const pageWidth = doc.internal.pageSize.getWidth();
 
-        doc.setFont("helvetica", "bold").setFontSize(22).text("OFFICIAL HAWK SERVER QUOTE", 14, 20);
-        doc.setFontSize(10).text(`Client: ${client} | Date: ${new Date().toLocaleDateString()}`, 14, 28);
-        doc.setFontSize(12).text(`${s}TB = $${window.unitPriceRaw.toLocaleString(undefined,{minimumFractionDigits:2})} each`, 14, 40);
-        doc.setFont("helvetica", "bold").text(`${n} x ${s}TB = $${window.drivePriceFinal.toLocaleString(undefined,{minimumFractionDigits:2})}`, 14, 47);
+        // --- NEW: Center the Logo Header ---
+        // REPLACE THIS STRING WITH YOUR CONVERTED IMAGE DATA
+        const logoBase64 = 'data:image/png;base64,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'; 
+        
+        const logoWidth = 60; // Desired width in mm
+        const logoHeight = 20; // Set height or aspect ratio based on your image
+        const logoX = (pageWidth / 2) - (logoWidth / 2); // Center horizontally
+        doc.addImage(logoBase64, 'PNG', logoX, 10, logoWidth, logoHeight); // Adjust Y=10 for top margin
+        
+        // --- Adjust visual elements downward from previous Y-positions ---
+        const startY = 35; // New visual start point after logo
 
-        doc.setLineWidth(0.5).rect(14, 52, 182, 60);
-        doc.line(14, 72, 196, 72); doc.line(14, 92, 196, 92);
-        doc.line(65, 52, 65, 112); doc.line(155, 52, 155, 112);
+        // 1. Header Line - CENTERED
+        doc.setFont("helvetica", "bold").setFontSize(22);
+        doc.text("HAWK NETFLOW SERVER QUOTE", pageWidth / 2, startY, { align: "center" });
+        
+        doc.setFontSize(10).setFont("helvetica", "normal");
+        // Aligning this line to the center for cleaner look
+        doc.text(`Client: ${client}  |  Date: ${new Date().toLocaleDateString()}`, pageWidth / 2, startY + 8, { align: "center" });
 
-        doc.setFontSize(14).text(document.getElementById('prevModel').innerText, 18, 65);
-        doc.setFontSize(8).setFont("helvetica", "normal").text(doc.splitTextToSize(document.getElementById('prevSpec').innerText, 85), 68, 58);
-        doc.setFont("helvetica", "bold").setFontSize(12).text("$" + window.serverPriceFinal.toLocaleString(undefined,{minimumFractionDigits:2}), 158, 65);
+        // 2. Drive Math Line
+        doc.setFontSize(12).setFont("helvetica", "normal").text(`${s}TB = $${window.unitPriceRaw.toLocaleString(undefined,{minimumFractionDigits:2})} each`, 14, startY + 22);
+        doc.setFont("helvetica", "bold").text(`${n} x ${s}TB = $${window.drivePriceFinal.toLocaleString(undefined,{minimumFractionDigits:2})}`, 14, startY + 29);
 
-        doc.text("STORAGE", 18, 85);
-        doc.setFont("helvetica", "normal").setFontSize(10).text(document.getElementById('prevDriveSpec').innerText, 68, 85);
-        doc.setFont("helvetica", "bold").setFontSize(12).text("$" + window.drivePriceFinal.toLocaleString(undefined,{minimumFractionDigits:2}), 158, 85);
+        // 3. Main Quote Table - RECONSTRUCTED
+        doc.setLineWidth(0.5).rect(14, startY + 35, 182, 60); // Outer Box
+        doc.line(14, startY + 55, 196, startY + 55); // Row 1 bottom line
+        doc.line(14, startY + 75, 196, startY + 75); // Row 2 bottom line
+        doc.line(65, startY + 35, 65, startY + 95); // Vertical 1
+        doc.line(155, startY + 35, 155, startY + 95); // Vertical 2
 
-        doc.text("GRAND TOTAL", 110, 105);
-        doc.text(document.getElementById('prevGrandTotal').innerText, 158, 105);
+        // Row 1 content
+        doc.setFontSize(14).text(document.getElementById('prevModel').innerText, 18, startY + 48);
+        doc.setFontSize(8).setFont("helvetica", "normal").text(doc.splitTextToSize(document.getElementById('prevSpec').innerText, 85), 68, startY + 42);
+        doc.setFont("helvetica", "bold").setFontSize(12).text("$" + window.serverPriceFinal.toLocaleString(undefined,{minimumFractionDigits:2}), 158, startY + 48);
 
-        doc.setDrawColor(40, 167, 69).rect(14, 120, 182, 30);
-        doc.setTextColor(30, 126, 52).setFontSize(11).setFont("helvetica", "bold").text("RAID CONFIGURATION SUMMARY", 20, 128);
+        // Row 2 content
+        doc.text("STORAGE", 18, startY + 68);
+        doc.setFont("helvetica", "normal").setFontSize(10).text(document.getElementById('prevDriveSpec').innerText, 68, startY + 68);
+        doc.setFont("helvetica", "bold").setFontSize(12).text("$" + window.drivePriceFinal.toLocaleString(undefined,{minimumFractionDigits:2}), 158, startY + 68);
+
+        // Row 3 content (Grand Total)
+        doc.text("GRAND TOTAL", 110, startY + 88);
+        doc.text(document.getElementById('prevGrandTotal').innerText, 158, startY + 88);
+
+        // 4. RAID Summary Box
+        doc.setDrawColor(40, 167, 69).rect(14, startY + 105, 182, 30);
+        doc.setTextColor(30, 126, 52).setFontSize(11).setFont("helvetica", "bold").text("RAID CONFIGURATION SUMMARY", 20, startY + 113);
         doc.setTextColor(0).setFontSize(10).setFont("helvetica", "normal");
-        doc.text(`Usable Capacity: ${document.getElementById('raidCap').innerText} | Fault Tolerance: ${document.getElementById('raidFault').innerText}`, 20, 140);
+        doc.text(`Usable Capacity: ${document.getElementById('raidCap').innerText} | Fault Tolerance: ${document.getElementById('raidFault').innerText}`, 20, startY + 125);
 
-        doc.setFillColor(0, 75, 99).rect(14, 160, 182, 60, 'F').setTextColor(255);
-        doc.setFontSize(16).setFont("helvetica", "bold").text("RESULT OF CALCULATION", 105, 175, {align: "center"});
-        doc.setDrawColor(255).line(40, 180, 170, 180);
-        doc.setFontSize(11).setFont("helvetica", "normal").text(`Total Video Archive: ${document.getElementById('dispArchive').innerText} TB (${document.getElementById('dispArchiveMark').innerText} TB Marked)`, 105, 192, {align: "center"});
-        doc.text(`Dedicated Metadata SSD: ${document.getElementById('dispMeta').innerText} GB`, 105, 202, {align: "center"});
+        // 5. Result of Calculation Box
+        doc.setFillColor(0, 75, 99).rect(14, startY + 145, 182, 50, 'F').setTextColor(255);
+        doc.setFontSize(16).setFont("helvetica", "bold").text("RESULT OF CALCULATION", pageWidth / 2, startY + 160, {align: "center"});
+        doc.setDrawColor(255).line(40, startY + 165, 170, startY + 165);
+        doc.setFontSize(11).setFont("helvetica", "normal").text(`Total Video Archive: ${document.getElementById('dispArchive').innerText} TB (${document.getElementById('dispArchiveMark').innerText} TB Marked)`, pageWidth / 2, startY + 177, {align: "center"});
+        doc.text(`Dedicated Metadata SSD: ${document.getElementById('dispMeta').innerText} GB`, pageWidth / 2, startY + 187, {align: "center"});
+
+        // 6. Disclaimer Section
+        doc.setTextColor(100); // Gray text
+        doc.setFontSize(9).setFont("helvetica", "italic");
+        const disclaimer = "Quote Validity: This quotation is valid for 24 hours from the date issued. Pricing is subject to change after expiration due to current market fluctuations in parts and components.";
+        const splitDisclaimer = doc.splitTextToSize(disclaimer, 180);
+        doc.text(splitDisclaimer, 14, 255); // Adjusted slightly for balance
 
         doc.save(`${client}_Hawk_Quote.pdf`);
     }
-
     calculate();
 </script>
 </body>
