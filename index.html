@@ -19,7 +19,7 @@
         .summary-table td { border: 2px solid #1a202c; padding: 20px; vertical-align: middle; }
         .row-label { width: 25%; font-weight: 900; font-size: 22px; text-align: center; background: #f7fafc; }
         .row-price { width: 20%; font-weight: 800; font-size: 20px; text-align: center; }
-        .grand-total-row { background: #2d3748; color: #fff; }
+        .grand-total-row { background: #004b63; /* Matches the Result Box exactly */color: #ffffff; /* White text for high contrast */border: 2px solid #00b4d8; /* Keeps that glowing tech border */}
         .raid-result-box { margin-top: 25px; border: 2px solid #38a169; padding: 20px; border-radius: 12px; background: #f0fff4; color: #2f855a; }
         .calc-result-box { 
     margin-top: 25px; 
@@ -128,9 +128,9 @@
                 <td class="row-price" id="prevDrivePrice">$0.00</td>
             </tr>
             <tr class="grand-total-row">
-                <td colspan="2" style="text-align:right; padding-right:20px; font-weight:bold;">GRAND TOTAL</td>
-                <td class="row-price" id="prevGrandTotal" style="color:white;">$0.00</td>
-            </tr>
+    <td colspan="2" style="text-align:right; padding-right:20px; font-weight:bold; color: #ffffff;">GRAND TOTAL</td>
+    <td class="row-price" id="prevGrandTotal" style="color: #ffffff;">$0.00</td>
+</tr>
         </table>
         <div class="raid-result-box">
             <div style="font-weight:bold;">RAID Summary: <span id="raidLabelTop">RAID 10</span></div>
