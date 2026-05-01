@@ -101,9 +101,9 @@
         <div class="input-group"><label>Single Disk Size (TB)</label><input type="number" id="raidSize" value="8" oninput="calculate()"></div>
         <div class="input-group"><label>RAID Type</label>
             <select id="raidType" onchange="calculate()">
-                <option value="0">RAID 0</option><option value="1">RAID 1</option>
-                <option value="5">RAID 5</option><option value="6">RAID 6</option>
-                <option value="10" selected>RAID 10</option>
+                <option value="0">RAID 0 (Stripe set)</option><option value="1">RAID 1 (Mirror)</option>
+                <option value="5">RAID 5 (Parity)</option><option value="6">RAID 6 (Double parity)</option>
+                <option value="10" selected>RAID 10 (Mirror-stripe)</option>
             </select>
         </div>
 
