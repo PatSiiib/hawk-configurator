@@ -339,9 +339,22 @@
     doc.setFont("helvetica", "normal").setFontSize(10).text(document.getElementById('prevDriveSpec').innerText, 68, startY + 53);
     doc.setFont("helvetica", "bold").setFontSize(12).text("$" + window.drivePriceFinal.toLocaleString(undefined,{minimumFractionDigits:2}), 158, startY + 53);
 
-    // Row 3: Grand Total
+    // --- Row 3: Grand Total content ---
+    // 1. Set the fill color to the "Tech Blue" (#004b63)
+    doc.setFillColor(0, 75, 99); 
+    // 2. Draw a filled rectangle for the bottom row (Y-position matches Row 3)
+    doc.rect(14, startY + 60, 182, 20, 'F'); 
+
+    // 3. Set text to white to make it pop against the blue background
+    doc.setTextColor(255);
+    doc.setFont("helvetica", "bold").setFontSize(14);
     doc.text("GRAND TOTAL", 110, startY + 73);
+    
+    // Pulls the current grand total from the web app
     doc.text(document.getElementById('prevGrandTotal').innerText, 158, startY + 73);
+
+    // --- IMPORTANT: Reset text color to Black for the next sections ---
+    doc.setTextColor(0);
 
     // 3. RAID Summary Box
     doc.setDrawColor(40, 167, 69).rect(14, startY + 90, 182, 50);
