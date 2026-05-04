@@ -44,8 +44,8 @@
         <div class="input-group">
             <label>Model Series</label>
             <select id="modelSelect" onchange="calculate()">
-                <option value="HAWK8">HAWK8</option><option value="HAWK16">HAWK16</option>
-                <option value="HAWK32" selected>HAWK32</option><option value="HAWK64">HAWK64</option>
+                <option value="HAWK8">HAWK8</option><option value="HAWK16" >HAWK16</option>
+                <option value="HAWK32">HAWK32</option><option value="HAWK64">HAWK64</option>
             </select>
         </div>
         <div class="input-group"><label>Client Name</label><input type="text" id="clientName" placeholder="Client Name" oninput="updateLabels()"></div>
@@ -66,14 +66,14 @@
         <div class="input-group">
             <label>RAID Controller</label>
             <select id="raidCard" onchange="calculate()">
-                <option value="RAID Controller">With RAID Card</option>
-                <option value="None" selected>No RAID Card</option>
+                <option value="RAID Controller" selected>With RAID Card</option>
+                <option value="None" >No RAID Card</option>
             </select>
         </div>
         <div class="input-group"><label>Drive Bays</label>
             <select id="bays" onchange="calculate()">
                 <option value="3 HDD Bay">3 HDD Bay</option>
-                <option value="5 HDD Bay" selected>5 HDD Bay</option>
+                <option value="5 HDD Bay">5 HDD Bay</option>
                 <option value="8 HDD Bay">8 HDD Bay</option>
             </select>
         </div>
