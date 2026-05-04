@@ -43,7 +43,7 @@
         <div class="section-title">1. System Hardware</div>
         <div class="input-group">
             <label>Model Series</label>
-            <select id="modelSelect" onchange="calculate()">
+            <select id="modelSelect" onchange="updateStandardHardware()">
                 <option value="HAWK16"selected>HAWK16</option>
                 <option value="HAWK32">HAWK32</option>
 				<option value="HAWK64">HAWK64</option>
@@ -68,12 +68,12 @@
             <label>RAID Controller</label>
             <select id="raidCard" onchange="calculate()">
                 <option value="RAID Controller" selected>With RAID Card</option>
-                <option value="None" >No RAID Card</option>
+                <option value="None">No RAID Card</option>
             </select>
         </div>
         <div class="input-group"><label>Drive Bays</label>
             <select id="bays" onchange="calculate()">
-                <option value="5 HDD Bay">5 HDD Bay</option>
+                <option value="5 HDD Bay" selected>5 HDD Bay</option>
                 <option value="8 HDD Bay">8 HDD Bay</option>
             </select>
         </div>
@@ -90,8 +90,8 @@
 
     <div class="col-inputs">
         <div class="section-title">2. RAID Calculator</div>
-        <div class="input-group"><label>Number of Disks</label><input type="number" id="raidDisks" value="0" oninput="calculate()"></div>
-        <div class="input-group"><label>Single Disk Size (TB)</label><input type="number" id="raidSize" value="0" oninput="calculate()"></div>
+        <div class="input-group"><label>Number of Disks</label><input type="number" id="raidDisks" value="4" oninput="calculate()"></div>
+        <div class="input-group"><label>Single Disk Size (TB)</label><input type="number" id="raidSize" value="8" oninput="calculate()"></div>
         <div class="input-group"><label>RAID Type</label>
             <select id="raidType" onchange="calculate()">
                 <option value="0">RAID 0</option><option value="1">RAID 1</option>
@@ -100,8 +100,8 @@
             </select>
         </div>
         <div class="section-title">3. Storage Calculation</div>
-        <div class="input-group"><label>Archive Target (TB)</label><input type="number" step="0.01" id="calcArchive" value="0.0" oninput="updateLabels()"></div>
-        <div class="input-group"><label>Metadata (GB)</label><input type="number" step="0.01" id="calcMeta" value="0.0" oninput="updateLabels()"></div>
+        <div class="input-group"><label>Archive Target (TB)</label><input type="number" step="0.01" id="calcArchive" value="22.25" oninput="updateLabels()"></div>
+        <div class="input-group"><label>Metadata (GB)</label><input type="number" step="0.01" id="calcMeta" value="649.20" oninput="updateLabels()"></div>
     </div>
 
     <div class="col-preview">
