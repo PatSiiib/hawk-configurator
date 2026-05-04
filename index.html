@@ -181,6 +181,7 @@
         document.getElementById('calcStatus').innerText = "Updated";
         updateLabels();
     };
+// 1. Updated function: Only call this when the Model dropdown changes
 function updateStandardHardware() {
     const model = document.getElementById('modelSelect').value;
     const cpuSelect = document.getElementById('cpu');
@@ -200,12 +201,16 @@ function updateStandardHardware() {
         ramSelect.value = "Memory (RAM) 32GB";
         baySelect.value = "8 HDD Bay";
     }
-}
-    function calculate() {
-    // 1. Trigger the auto-population first
-    updateStandardHardware(); 
     
-    // 2. Existing logic continues below
+    // After auto-populating, trigger a calculation to update price
+    calculate(true); 
+}
+
+// 2. Modified calculate function
+function calculate(isModelChange = false) {
+    // If calculate was triggered by anything OTHER than a model change, 
+    // it will NOT overwrite your manual selections.
+    
     updateRAID();
     document.getElementById('calcStatus').innerText = "Calculating...";
     
