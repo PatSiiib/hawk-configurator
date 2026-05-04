@@ -181,24 +181,49 @@
         document.getElementById('calcStatus').innerText = "Updated";
         updateLabels();
     };
+function updateStandardHardware() {
+    const model = document.getElementById('modelSelect').value;
+    const cpuSelect = document.getElementById('cpu');
+    const ramSelect = document.getElementById('ramSelect');
+    const baySelect = document.getElementById('bays');
 
-    function calculate() {
-        updateRAID();
-        document.getElementById('calcStatus').innerText = "Calculating...";
-        const params = { 
-            cpu: document.getElementById('cpu').value, 
-            ram: document.getElementById('ramSelect').value,
-            gpu: document.getElementById('gpu').value, 
-            bay: document.getElementById('bays').value,
-            raidCard: document.getElementById('raidCard').value,
-            driveQty: document.getElementById('raidDisks').value, 
-            driveSize: document.getElementById('raidSize').value,
-            callback: "callback" 
-        };
-        const script = document.createElement('script');
-        script.src = webAppUrl + "?" + new URLSearchParams(params).toString() + "&t=" + new Date().getTime();
-        document.body.appendChild(script);
+    if (model === "HAWK16") {
+        cpuSelect.value = "Intel Ultra 5";
+        ramSelect.value = "Memory (RAM) 16GB";
+        baySelect.value = "3 HDD Bay";
+    } else if (model === "HAWK32") {
+        cpuSelect.value = "Intel Ultra 7";
+        ramSelect.value = "Memory (RAM) 16GB";
+        baySelect.value = "5 HDD Bay";
+    } else if (model === "HAWK64") {
+        cpuSelect.value = "Intel Ultra 9";
+        ramSelect.value = "Memory (RAM) 32GB";
+        baySelect.value = "8 HDD Bay";
     }
+}
+    function calculate() {
+    // 1. Trigger the auto-population first
+    updateStandardHardware(); 
+    
+    // 2. Existing logic continues below
+    updateRAID();
+    document.getElementById('calcStatus').innerText = "Calculating...";
+    
+    const params = { 
+        cpu: document.getElementById('cpu').value, 
+        ram: document.getElementById('ramSelect').value,
+        gpu: document.getElementById('gpu').value, 
+        bay: document.getElementById('bays').value,
+        raidCard: document.getElementById('raidCard').value,
+        driveQty: document.getElementById('raidDisks').value, 
+        driveSize: document.getElementById('raidSize').value,
+        callback: "callback" 
+    };
+    
+    const script = document.createElement('script');
+    script.src = webAppUrl + "?" + new URLSearchParams(params).toString() + "&t=" + new Date().getTime();
+    document.body.appendChild(script);
+}
 
     function downloadPDF() {
     const { jsPDF } = window.jspdf;
