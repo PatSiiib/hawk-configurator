@@ -19,7 +19,7 @@
         .summary-table td { border: 2px solid #1a202c; padding: 20px; vertical-align: middle; }
         .row-label { width: 25%; font-weight: 900; font-size: 22px; text-align: center; background: #f7fafc; }
         .row-price { width: 20%; font-weight: 800; font-size: 20px; text-align: center; }
-        .grand-total-row { background: #004b63; /* Matches the Result Box exactly */color: #ffffff; /* White text for high contrast */border: 2px solid #00b4d8; /* Keeps that glowing tech border */}
+        .grand-total-row { background: #2d3748; color: #fff; }
         .raid-result-box { margin-top: 25px; border: 2px solid #38a169; padding: 20px; border-radius: 12px; background: #f0fff4; color: #2f855a; }
         .calc-result-box { 
     margin-top: 25px; 
@@ -45,19 +45,16 @@
         <div class="input-group">
             <label>Model Series</label>
             <select id="modelSelect" onchange="calculate()">
-                <option value="HAWK8">HAWK8</option>
-				<option value="HAWK16">HAWK16</option>
-                <option value="HAWK32">HAWK32</option>
-				<option value="HAWK64">HAWK64</option>
-				<option value="HAWK128">HAWK128</option>
+                <option value="HAWK8">HAWK8</option><option value="HAWK16">HAWK16</option>
+                <option value="HAWK32" selected>HAWK32</option><option value="HAWK64">HAWK64</option>
             </select>
         </div>
         <div class="input-group"><label>Client Name</label><input type="text" id="clientName" placeholder="Client Name" oninput="updateLabels()"></div>
         <div class="input-group"><label>Processor (CPU)</label>
             <select id="cpu" onchange="calculate()">
-                <option value="Intel Core Ultra 5">Intel Core Ultra 5</option>
-                <option value="Intel Core Ultra 7">Intel Core Ultra 7</option>
-                <option value="Intel Core Ultra 9">Intel Core Ultra 9</option>
+                <option value="Intel Ultra 5">Intel Ultra 5</option>
+                <option value="Intel Ultra 7">Intel Ultra 7</option>
+                <option value="Intel Ultra 9">Intel Ultra 9</option>
             </select>
         </div>
         <div class="input-group"><label>Memory (RAM)</label>
@@ -77,7 +74,7 @@
         <div class="input-group"><label>Drive Bays</label>
             <select id="bays" onchange="calculate()">
                 <option value="3 HDD Bay">3 HDD Bay</option>
-                <option value="5 HDD Bay">5 HDD Bay</option>
+                <option value="5 HDD Bay" selected>5 HDD Bay</option>
                 <option value="8 HDD Bay">8 HDD Bay</option>
             </select>
         </div>
@@ -98,20 +95,18 @@
 
     <div class="col-inputs">
         <div class="section-title">2. RAID Calculator</div>
-        <div class="input-group"><label>Number of Disks</label><input type="number" id="raidDisks" value="0" oninput="calculate()"></div>
-        <div class="input-group"><label>Single Disk Size (TB)</label><input type="number" id="raidSize" value="0" oninput="calculate()"></div>
+        <div class="input-group"><label>Number of Disks</label><input type="number" id="raidDisks" value="4" oninput="calculate()"></div>
+        <div class="input-group"><label>Single Disk Size (TB)</label><input type="number" id="raidSize" value="8" oninput="calculate()"></div>
         <div class="input-group"><label>RAID Type</label>
             <select id="raidType" onchange="calculate()">
-                <option value="0">RAID 0 (Stripe set)</option>
-				<option value="1">RAID 1 (Mirror)</option>
-                <option value="5">RAID 5 (Parity)</option>
-				<option value="6">RAID 6 (Double parity)</option>
-                <option value="10" selected>RAID 10 (Mirror-stripe)</option>
+                <option value="0">RAID 0</option><option value="1">RAID 1</option>
+                <option value="5">RAID 5</option><option value="6">RAID 6</option>
+                <option value="10" selected>RAID 10</option>
             </select>
         </div>
         <div class="section-title">3. Storage Calculation</div>
-        <div class="input-group"><label>Archive Target (TB)</label><input type="number" step="0.01" id="calcArchive" value="0.0" oninput="updateLabels()"></div>
-        <div class="input-group"><label>Metadata (GB)</label><input type="number" step="0.01" id="calcMeta" value="0.0" oninput="updateLabels()"></div>
+        <div class="input-group"><label>Archive Target (TB)</label><input type="number" step="0.01" id="calcArchive" value="22.25" oninput="updateLabels()"></div>
+        <div class="input-group"><label>Metadata (GB)</label><input type="number" step="0.01" id="calcMeta" value="649.20" oninput="updateLabels()"></div>
     </div>
 
     <div class="col-preview">
@@ -119,7 +114,7 @@
         <table class="summary-table">
             <tr>
                 <td class="row-label" id="prevModel">HAWK32</td>
-                <td id="prevSpec" style="font-size:13px;">Initializing...</td>
+                <td id="prevSpec" style="font-size:13px;">Initialising...</td>
                 <td class="row-price" id="prevBasePrice">$0.00</td>
             </tr>
             <tr>
@@ -128,9 +123,9 @@
                 <td class="row-price" id="prevDrivePrice">$0.00</td>
             </tr>
             <tr class="grand-total-row">
-    <td colspan="2" style="text-align:right; padding-right:20px; font-weight:bold; color: #ffffff;">GRAND TOTAL</td>
-    <td class="row-price" id="prevGrandTotal" style="color: #ffffff;">$0.00</td>
-</tr>
+                <td colspan="2" style="text-align:right; padding-right:20px; font-weight:bold;">GRAND TOTAL</td>
+                <td class="row-price" id="prevGrandTotal" style="color:white;">$0.00</td>
+            </tr>
         </table>
         <div class="raid-result-box">
             <div style="font-weight:bold;">RAID Summary: <span id="raidLabelTop">RAID 10</span></div>
@@ -181,7 +176,7 @@
         const ram = document.getElementById('ramSelect').options[document.getElementById('ramSelect').selectedIndex].text;
         const gpu = document.getElementById('gpu').value;
         const bay = document.getElementById('bays').value;
-        const card = document.getElementById('raidCard').value === "None" ? "" : "MegaRAID 9560-8i, ";
+        const card = document.getElementById('raidCard').value === "None" ? "" : "Physical RAID Card, ";
 
         document.getElementById('prevModel').innerText = document.getElementById('modelSelect').value;
         document.getElementById('prevSpec').innerText = `${cpu}, ${ram}, 1TB OS, 1TB Metadata, ${card}RAID ${document.getElementById('raidType').value} (${n}x${s}TB), ${bay}, ${gpu}, Windows 11 Pro & NetFlow Ready`;
@@ -339,22 +334,9 @@
     doc.setFont("helvetica", "normal").setFontSize(10).text(document.getElementById('prevDriveSpec').innerText, 68, startY + 53);
     doc.setFont("helvetica", "bold").setFontSize(12).text("$" + window.drivePriceFinal.toLocaleString(undefined,{minimumFractionDigits:2}), 158, startY + 53);
 
-    // --- Row 3: Grand Total content ---
-    // 1. Set the fill color to the "Tech Blue" (#004b63)
-    doc.setFillColor(0, 75, 99); 
-    // 2. Draw a filled rectangle for the bottom row (Y-position matches Row 3)
-    doc.rect(14, startY + 60, 182, 20, 'F'); 
-
-    // 3. Set text to white to make it pop against the blue background
-    doc.setTextColor(255);
-    doc.setFont("helvetica", "bold").setFontSize(14);
+    // Row 3: Grand Total
     doc.text("GRAND TOTAL", 110, startY + 73);
-    
-    // Pulls the current grand total from the web app
     doc.text(document.getElementById('prevGrandTotal').innerText, 158, startY + 73);
-
-    // --- IMPORTANT: Reset text color to Black for the next sections ---
-    doc.setTextColor(0);
 
     // 3. RAID Summary Box
     doc.setDrawColor(40, 167, 69).rect(14, startY + 90, 182, 50);
@@ -388,27 +370,6 @@
     doc.save(`${client}_Hawk_Quote.pdf`);
 }
     calculate();
-	// --- AUTO REFRESH LOGIC ---
-// This will trigger the calculate() function every 5 minutes (300,000 milliseconds)
-// to ensure pricing is synced with the Google Sheet.
-
-const refreshMinutes = 5; 
-const refreshInterval = refreshMinutes * 60 * 1000;
-
-setInterval(() => {
-    console.log("Auto-refreshing pricing from Google Sheets...");
-    
-    // Only refresh if the user isn't currently typing (optional safety)
-    if (document.activeElement.tagName !== 'INPUT') {
-        calculate();
-        
-        // Update the status so you can see it happened
-        const status = document.getElementById('calcStatus');
-        if (status) {
-            status.innerText = "Auto-Updated: " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-        }
-    }
-}, refreshInterval);
 </script>
 </body>
 </html>
