@@ -179,7 +179,7 @@
         const card = document.getElementById('raidCard').value === "None" ? "" : "Physical RAID Card, ";
 
         document.getElementById('prevModel').innerText = document.getElementById('modelSelect').value;
-        document.getElementById('prevSpec').innerText = `${cpu}, ${ram}, 1TB OS, 1TB Metadata, ${card}RAID ${document.getElementById('raidType').value} (${n}x${s}TB), ${bay}, ${gpu}, Windows 11 Pro & NetFlow Ready`;
+        document.getElementById('prevSpec').innerText = `${cpu}, ${ram}, 1TB OS, 2TB Metadata, ${card}RAID ${document.getElementById('raidType').value} (${n}x${s}TB), ${bay}, ${gpu}, Windows 11 Pro & NetFlow Ready`;
         document.getElementById('prevDriveSpec').innerText = `${n} x ${s}TB Hard Drives ($${window.unitPriceRaw.toLocaleString(undefined, {minimumFractionDigits:2})} each)`;
 
         const arch = parseFloat(document.getElementById('calcArchive').value) || 0;
