@@ -44,8 +44,9 @@
         <div class="input-group">
             <label>Model Series</label>
             <select id="modelSelect" onchange="calculate()">
-                <option value="HAWK8">HAWK8</option><option value="HAWK16" >HAWK16</option>
-                <option value="HAWK32">HAWK32</option><option value="HAWK64">HAWK64</option>
+                <option value="HAWK16"selected>HAWK16</option>
+                <option value="HAWK32">HAWK32</option>
+				<option value="HAWK64">HAWK64</option>
             </select>
         </div>
         <div class="input-group"><label>Client Name</label><input type="text" id="clientName" placeholder="Client Name" oninput="updateLabels()"></div>
@@ -72,7 +73,6 @@
         </div>
         <div class="input-group"><label>Drive Bays</label>
             <select id="bays" onchange="calculate()">
-                <option value="3 HDD Bay">3 HDD Bay</option>
                 <option value="5 HDD Bay">5 HDD Bay</option>
                 <option value="8 HDD Bay">8 HDD Bay</option>
             </select>
@@ -190,7 +190,7 @@ function updateStandardHardware() {
     if (model === "HAWK16") {
         cpuSelect.value = "Intel Ultra 5";
         ramSelect.value = "Memory (RAM) 16GB";
-        baySelect.value = "3 HDD Bay";
+        baySelect.value = "5 HDD Bay";
     } else if (model === "HAWK32") {
         cpuSelect.value = "Intel Ultra 7";
         ramSelect.value = "Memory (RAM) 16GB";
