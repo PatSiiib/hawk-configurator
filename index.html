@@ -64,89 +64,93 @@
         <div class="input-group">
             <label>Model Series</label>
             <select id="modelSelect" onchange="updateStandardHardware()">
-			<option value="" disabled selected>-- Select Model --</option>
+                <option value="" disabled selected>-- Select Model --</option>
                 <option value="HAWK16">HAWK16</option>
                 <option value="HAWK32">HAWK32</option>
-				<option value="HAWK64">HAWK64</option>
+                <option value="HAWK64">HAWK64</option>
             </select>
         </div>
         <div class="input-group"><label>Client Name</label><input type="text" id="clientName" placeholder="Client Name" oninput="updateLabels()"></div>
-		<div class="input-group"><label>Customer Name</label><input type="text" id="customerName" placeholder="Customer Name" oninput="updateLabels()"></div>
+        <div class="input-group"><label>Customer Name</label><input type="text" id="customerName" placeholder="Customer Name" oninput="updateLabels()"></div>
         <div class="input-group"><label>Processor (CPU)</label><div id="cpu" class="static-val"></div></div>
-		<div class="input-group"><label>Memory (RAM)</label><div id="ramSelect" class="static-val"></div></div>
-		<div class="input-group"><label>RAID Controller</label><div id="raidCard" class="static-val"></div></div>
-		<div class="input-group"><label>Drive Bays</label><div id="bays" class="static-val"></div></div>
-		<div class="input-group"><label>GPU</label><div id="gpu" class="static-val"></div></div>
-		
+        <div class="input-group"><label>Memory (RAM)</label><div id="ramSelect" class="static-val"></div></div>
+        <div class="input-group"><label>RAID Controller</label><div id="raidCard" class="static-val"></div></div>
+        <div class="input-group"><label>Drive Bays</label><div id="bays" class="static-val"></div></div>
+        <div class="input-group"><label>GPU</label><div id="gpu" class="static-val"></div></div>
         
         <button class="main-btn" onclick="downloadPDF()">Export Full Quote</button>
-        <button class="main-btn" style="visibility: hidden; background: linear-gradient(135deg, #1D6F42 0%, #114B2C 100%); margin-top: 10px;" onclick="exportToExcel()">  Export Itemized Excel (.xlsx)</button >
+        <button class="main-btn" style="visibility: hidden; background: linear-gradient(135deg, #1D6F42 0%, #114B2C 100%); margin-top: 10px;" onclick="exportToExcel()">Export Itemized Excel</button>
         <span id="calcStatus" style="font-size:11px; color:#a0aec0; display:block; text-align:center; margin-top:10px;">Standby</span>
     </div>
-</div>
+
     <div class="col-inputs">
         <div class="section-title">2. RAID Calculator</div>
-        <div class="input-group"><label>Number of Disks</label><input type="number" id="raidDisks" value="0" oninput="calculate()"></div>
-        <div class="input-group"><label>Single Disk Size (TB)</label><input type="number" id="raidSize" value="0" oninput="calculate()"></div>
-        <div class="input-group"><label>RAID Type</label>
+        <div class="input-group">
+            <label>Number of Disks</label>
+            <input type="number" id="raidDisks" value="0" readonly style="background-color: #edf2f7; color: #4a5568; cursor: not-allowed;">
+        </div>
+        <div class="input-group">
+            <label>Single Disk Size (TB)</label>
+            <input type="number" id="raidSize" value="0" readonly style="background-color: #edf2f7; color: #4a5568; cursor: not-allowed;">
+        </div>
+        <div class="input-group">
+            <label>RAID Type</label>
             <select id="raidType" onchange="calculate()">
-                <option value="0">RAID 0</option><option value="1">RAID 1</option>
-                <option value="5">RAID 5</option><option value="6">RAID 6</option>
+                <option value="0">RAID 0</option>
+                <option value="1">RAID 1</option>
+                <option value="5">RAID 5</option>
+                <option value="6">RAID 6</option>
                 <option value="10" selected>RAID 10</option>
             </select>
         </div>
-        <div class="section-title">3. Camera/Archive Calculator</div>
-<div class="input-group">
-    <label>Basic Cameras</label>
-    <input type="number" id="camQty" value="0" min="0" oninput="calculateArchive()">
-</div>
-<div class="input-group">
-    <label>Neural Tracker Cameras</label>
-    <input type="number" id="neuralCamQty" value="0" min="0" oninput="calculateArchive()">
-</div>
-<div class="input-group">
-    <label>Facial Recognition Cameras</label>
-    <input type="number" id="faceCamQty" value="0" min="0" oninput="calculateArchive()">
-</div>
-<div class="input-group">
-    <label>LPR Cameras</label>
-    <input type="number" id="lprCamQty" value="0" min="0" oninput="calculateArchive()">
-</div>
 
-<input type="hidden" id="calcArchive">
-<input type="hidden" id="calcMeta">
+        <div class="section-title">3. Camera/Archive Calculator</div>
+        <div class="input-group">
+            <label>Basic Cameras</label>
+            <input type="number" id="camQty" value="0" min="0" oninput="calculateArchive()">
+        </div>
+        <div class="input-group">
+            <label>Neural Tracker Cameras</label>
+            <input type="number" id="neuralCamQty" value="0" min="0" oninput="calculateArchive()">
+        </div>
+        <div class="input-group">
+            <label>Facial Recognition Cameras</label>
+            <input type="number" id="faceCamQty" value="0" min="0" oninput="calculateArchive()">
+        </div>
+        <div class="input-group">
+            <label>LPR Cameras</label>
+            <input type="number" id="lprCamQty" value="0" min="0" oninput="calculateArchive()">
+        </div>
+
+        <input type="hidden" id="calcArchive">
+        <input type="hidden" id="calcMeta">
     </div>
 
     <div class="col-preview">
         <h2 style="margin-top:0;">Quote Breakdown</h2>
         <table class="summary-table">
             <tr>
-                <td class="row-label" id="prevModel">HAWK32</td>
-                <td id="prevSpec" style="font-size:13px;">Calculating...</td>
+                <td class="row-label" id="prevModel">Select Model</td>
+                <td id="prevSpec" style="font-size:13px;">Please select a model and enter camera quantities...</td>
                 <td class="row-price" id="combinedTotalDisplay">$0.00</td>
             </tr>
         </table>
-		
-		
-
 
         <div class="raid-result-box">
             <div style="font-weight:bold;">RAID Summary: <span id="raidLabelTop">RAID 10</span></div>
             <div style="font-size:14px;">Usable Capacity: <span id="raidCap" style="font-weight:bold;">0.0 TB</span> | Fault Tolerance: <span id="raidFault" style="font-weight:bold;">0 drive</span></div>
         </div>
-		
-		<div id="licenseBreakdown" style="margin-top: 20px; display: none; border: 1px solid #cbd5e0; border-radius: 8px; overflow: hidden; font-size: 14px;">
-    <div style="background: #edf2f7; padding: 10px; font-weight: bold; border-bottom: 1px solid #cbd5e0; color: #2d3748;">
-        Additional Software Licenses
-    </div>
-    <div id="licenseRows" style="background: white; padding: 10px;">
+        
+        <div id="licenseBreakdown" style="margin-top: 20px; display: none; border: 1px solid #cbd5e0; border-radius: 8px; overflow: hidden; font-size: 14px;">
+            <div style="background: #edf2f7; padding: 10px; font-weight: bold; border-bottom: 1px solid #cbd5e0; color: #2d3748;">
+                Additional Software Licenses
+            </div>
+            <div id="licenseRows" style="background: white; padding: 10px;"></div>
+            <div id="licenseTotalRow" style="background: #f7fafc; padding: 10px; font-weight: bold; border-top: 1px dashed #cbd5e0; display: flex; justify-content: space-between;">
+                <span>License Total:</span>
+                <span id="dispLicenseTotal">$0.00</span>
+            </div>
         </div>
-    <div id="licenseTotalRow" style="background: #f7fafc; padding: 10px; font-weight: bold; border-top: 1px dashed #cbd5e0; display: flex; justify-content: space-between;">
-        <span>License Total:</span>
-        <span id="dispLicenseTotal">$0.00</span>
-    </div>
-</div>
-
 
         <div class="calc-result-box">
             <div class="calc-row">
@@ -158,8 +162,7 @@
                 <div class="calc-value"><span id="dispMeta">0.0</span> GB <span class="calc-sub">(SSD marked capacity <span id="dispMetaMark">0.0</span> GB)</span></div>
             </div>
         </div>
-    </div>
-</div>
+    </div> </div> 
 
 <script>
     const webAppUrl = "https://script.google.com/macros/s/AKfycbwoxf_zSMB2XjaUNLuhJUl8FEMVh8SVUw-gXUhu0Keqq9EkPOKqEFHV64vQpGa9JbnM/exec";
@@ -194,31 +197,64 @@
     };
 
     function calculateArchive() {
-    // 1. Get Quantities
+    // 1. Get Inputs
+    const model = document.getElementById('modelSelect').value;
     const basicQty = parseInt(document.getElementById('camQty').value) || 0;
     const neuralQty = parseInt(document.getElementById('neuralCamQty').value) || 0;
     const faceQty = parseInt(document.getElementById('faceCamQty').value) || 0;
     const lprQty = parseInt(document.getElementById('lprCamQty').value) || 0;
     
-    // 2. Storage & Price Constants
+    // 2. Constants
     const archivePerBasicCam = 711.92;
     const metadataPerSpecialCam = 37.90;
-    
-    const priceNeural = 298.00;
-    const priceFace = 878.00;
-    const priceLPR = 1526.00;
 
     // 3. Storage Calculations
-    const totalArchiveGB = basicQty * archivePerBasicCam;
-    const specialCamTotalQty = neuralQty + faceQty + lprQty;
-    const totalMetaGB = specialCamTotalQty * metadataPerSpecialCam;
+    const totalArchiveTB = (basicQty * archivePerBasicCam) / 1000;
+    const totalMetaGB = (neuralQty + faceQty + lprQty) * metadataPerSpecialCam;
+    const requiredRawTB = totalArchiveTB * 2; // RAID 10 requires 2x Usable
+    const availableSizes = [6, 8, 12, 22]; 
+    
+    let selectedQty = 0;
+    let selectedSize = 0;
 
-    // Update Archive UI
-    const totalArchiveTB = totalArchiveGB / 1000;
+    if (totalArchiveTB > 0) {
+        // --- SMART CHASSIS LOGIC ---
+        let driveCountOptions = [];
+        
+        if (model === "HAWK64") {
+            // Fill the 8-bay chassis (8, 6, or 4 disks)
+            driveCountOptions = [8, 6, 4]; 
+        } else {
+            // HAWK16 & HAWK32 (5-bays) only allow 4 disks for RAID 10
+            driveCountOptions = [4];
+        }
+
+        let foundMatch = false;
+        for (let qty of driveCountOptions) {
+            let bestSize = availableSizes.find(s => (s * qty) >= requiredRawTB);
+            if (bestSize) {
+                selectedQty = qty;
+                selectedSize = bestSize;
+                foundMatch = true;
+                break; 
+            }
+        }
+
+        // Fallback for extreme storage needs
+        if (!foundMatch) {
+            selectedQty = (model === "HAWK64") ? 8 : 4;
+            selectedSize = 22;
+        }
+    }
+
+    // Update the Locked Inputs
+    document.getElementById('raidDisks').value = selectedQty;
+    document.getElementById('raidSize').value = selectedSize;
+
+    // --- UI UPDATES ---
     document.getElementById('dispArchive').innerText = totalArchiveTB.toFixed(2);
     document.getElementById('dispArchiveMark').innerText = (totalArchiveTB * 1.0997).toFixed(2);
 
-    // Update Metadata UI (GB/TB Flip)
     const metaContainer = document.getElementById('dispMeta').parentElement; 
     if (totalMetaGB >= 1000) {
         const metaTB = totalMetaGB / 1000;
@@ -227,46 +263,34 @@
         metaContainer.innerHTML = `<span id="dispMeta">${totalMetaGB.toFixed(2)}</span> GB <span class="calc-sub">(SSD marked capacity <span id="dispMetaMark">${(totalMetaGB * 1.105).toFixed(2)}</span> GB)</span>`;
     }
 
-    // 4. License Price Calculations
-    let licenseHTML = "";
-    let licenseTotal = 0;
+    // --- LICENSE CALCULATION ---
+    updateLicenseUI(neuralQty, faceQty, lprQty);
 
-    if (neuralQty > 0) {
-        const cost = neuralQty * priceNeural;
-        licenseTotal += cost;
-        licenseHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-            <span>Neural Tracker (${neuralQty}x)</span> <span>$${cost.toLocaleString()}</span>
-        </div>`;
-    }
-    if (faceQty > 0) {
-        const cost = faceQty * priceFace;
-        licenseTotal += cost;
-        licenseHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-            <span>Facial Recognition (${faceQty}x)</span> <span>$${cost.toLocaleString()}</span>
-        </div>`;
-    }
-    if (lprQty > 0) {
-        const cost = lprQty * priceLPR;
-        licenseTotal += cost;
-        licenseHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-            <span>LPR License (${lprQty}x)</span> <span>$${cost.toLocaleString()}</span>
-        </div>`;
-    }
-
-    // Show/Hide License Box
-    const breakdownBox = document.getElementById('licenseBreakdown');
-    if (licenseTotal > 0) {
-        breakdownBox.style.display = 'block';
-        document.getElementById('licenseRows').innerHTML = licenseHTML;
-        document.getElementById('dispLicenseTotal').innerText = "$" + licenseTotal.toLocaleString(undefined, {minimumFractionDigits: 2});
-    } else {
-        breakdownBox.style.display = 'none';
-    }
-
-    // Update hidden inputs and labels
+    // Final Synchronization
     document.getElementById('calcArchive').value = totalArchiveTB;
     document.getElementById('calcMeta').value = totalMetaGB;
-    updateLabels();
+    
+    // Trigger main functions
+    if (typeof calculate === "function") calculate(); 
+    if (typeof updateLabels === "function") updateLabels();
+}
+
+function updateLicenseUI(n, f, l) {
+    let licenseHTML = "";
+    let total = (n * 298) + (f * 878) + (l * 1526);
+    
+    if (n > 0) licenseHTML += `<div>Neural Tracker (${n}x) - $${(n*298).toLocaleString()}</div>`;
+    if (f > 0) licenseHTML += `<div>Facial Recognition (${f}x) - $${(f*878).toLocaleString()}</div>`;
+    if (l > 0) licenseHTML += `<div>LPR License (${l}x) - $${(l*1526).toLocaleString()}</div>`;
+
+    const box = document.getElementById('licenseBreakdown');
+    if (total > 0) {
+        box.style.display = 'block';
+        document.getElementById('licenseRows').innerHTML = licenseHTML;
+        document.getElementById('dispLicenseTotal').innerText = "$" + total.toLocaleString(undefined, {minimumFractionDigits: 2});
+    } else {
+        box.style.display = 'none';
+    }
 }
 
     function updateStandardHardware() {
@@ -334,6 +358,7 @@
     const script = document.createElement('script');
     script.src = webAppUrl + "?" + new URLSearchParams(params).toString() + "&t=" + new Date().getTime();
     document.body.appendChild(script);
+	console.log("Calculate triggered");
 }
 
     function updateLabels() {
@@ -539,6 +564,7 @@ try {
     doc.text(splitDisclaimer, 14, 292);
 
     doc.save(`${client}_${customer}_Hawk_Quote.pdf`);
+	console.log("Labels updated");
 }
 </script>
 </body>
