@@ -279,9 +279,17 @@ function updateLicenseUI(n, f, l) {
     let licenseHTML = "";
     let total = (n * 298) + (f * 878) + (l * 1526);
     
-    if (n > 0) licenseHTML += `<div>Neural Tracker (${n}x) - $${(n*298).toLocaleString()}</div>`;
-    if (f > 0) licenseHTML += `<div>Facial Recognition (${f}x) - $${(f*878).toLocaleString()}</div>`;
-    if (l > 0) licenseHTML += `<div>LPR License (${l}x) - $${(l*1526).toLocaleString()}</div>`;
+    // Helper to create a row with name on left and price on right
+    const createRow = (label, qty, price) => {
+        return `<div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span>${label} (${qty}x)</span>
+                    <span>$${(qty * price).toLocaleString()}</span>
+                </div>`;
+    };
+
+    if (n > 0) licenseHTML += createRow("Neural Tracker", n, 298);
+    if (f > 0) licenseHTML += createRow("Facial Recognition", f, 878);
+    if (l > 0) licenseHTML += createRow("LPR License", l, 1526);
 
     const box = document.getElementById('licenseBreakdown');
     if (total > 0) {
