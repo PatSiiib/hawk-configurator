@@ -75,7 +75,7 @@
     <div class="col-inputs">
         <div class="section-title">1. System Hardware</div>
 		<div class="input-group"><label>Client Name</label><input type="text" id="clientName" placeholder="Client Name" oninput="updateLabels()"></div>
-        <div class="input-group"><label>PO number</label><input type="text" id="customerName" placeholder="Customer Name" oninput="updateLabels()"></div>
+        <div class="input-group"><label>PO number</label><input type="text" id="poNumber" placeholder="PO Number" oninput="updateLabels()"></div>
         <div class="input-group">
             <label>Model Series</label>
             <select id="modelSelect" onchange="updateStandardHardware()" disabled style="background-color: #edf2f7; cursor: not-allowed;">
@@ -454,7 +454,7 @@ function updateLicenseUI(n, f, l) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     const client = document.getElementById('clientName').value || "Client";
-	const customer = document.getElementById('customerName').value || "Customer"; // Added this line
+	const poNumber = document.getElementById('poNumber').value || "PO Number"; // Added this line
     const n = parseInt(document.getElementById('raidDisks').value) || 0;
     const s = parseFloat(document.getElementById('raidSize').value) || 0;
     const rawCap = (n * s).toFixed(1); 
@@ -499,7 +499,7 @@ try {
     doc.setFontSize(10).setFont("helvetica", "normal").setTextColor(0);
     doc.text(`Client: ${client}`, pageWidth / 2, currentY, { align: "center" });
     currentY += 6;
-    doc.text(`Customer: ${customer}`, pageWidth / 2, currentY, { align: "center" }); 
+    doc.text(`PO Number: ${poNumber}`, pageWidth / 2, currentY, { align: "center" }); 
     currentY += 6;
     doc.text(`Date: ${formattedToday}`, pageWidth / 2, currentY, { align: "center" });
     
@@ -659,7 +659,7 @@ try {
     const disclaimer = "Quote Validity: This quotation is valid for 7 days from the date issued. Pricing is subject to change after expiration due to current market fluctuations.";
     doc.text(doc.splitTextToSize(disclaimer, 180), 14, 293);
 
-    doc.save(`${client}_${customer}_Hawk_Quote.pdf`);
+    doc.save(`${client}_${poNumber}_Hawk_Quote.pdf`);
 }
 </script>
 </body>
