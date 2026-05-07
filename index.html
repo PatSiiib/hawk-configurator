@@ -74,6 +74,8 @@
 <div class="main-wrapper">
     <div class="col-inputs">
         <div class="section-title">1. System Hardware</div>
+		<div class="input-group"><label>Client Name</label><input type="text" id="clientName" placeholder="Client Name" oninput="updateLabels()"></div>
+        <div class="input-group"><label>Customer Name</label><input type="text" id="customerName" placeholder="Customer Name" oninput="updateLabels()"></div>
         <div class="input-group">
             <label>Model Series</label>
             <select id="modelSelect" onchange="updateStandardHardware()" disabled style="background-color: #edf2f7; cursor: not-allowed;">
@@ -81,10 +83,9 @@
     <option value="HAWK16">HAWK16</option>
     <option value="HAWK32">HAWK32</option>
     <option value="HAWK64">HAWK64</option>
-</select>
+	</select>
         </div>
-        <div class="input-group"><label>Client Name</label><input type="text" id="clientName" placeholder="Client Name" oninput="updateLabels()"></div>
-        <div class="input-group"><label>Customer Name</label><input type="text" id="customerName" placeholder="Customer Name" oninput="updateLabels()"></div>
+        
         <div class="input-group"><label>Processor (CPU)</label><div id="cpu" class="static-val"></div></div>
         <div class="input-group"><label>Memory (RAM)</label><div id="ramSelect" class="static-val"></div></div>
         <div class="input-group"><label>RAID Controller</label><div id="raidCard" class="static-val"></div></div>
@@ -324,7 +325,7 @@ function updateLicenseUI(n, f, l) {
     let licenseHTML = "";
     
     const items = [
-        { name: "Neural Tracker", part: "NFINT-CAML", price: 298, qty: n },
+        { name: "IP Camera with Neural AI", part: "NFINT-CAML", price: 298, qty: n },
         { name: "Facial Recognition", part: "NFINT-FRC1", price: 878, qty: f },
         { name: "LPR License", part: "NFINT-LPVR", price: 1526, qty: l }
     ];
