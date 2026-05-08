@@ -120,21 +120,24 @@
 
         <div class="section-title">3. Camera/Archive Calculator</div>
         <div class="input-group">
-            <label>Basic Cameras</label>
-            <input type="number" id="camQty" value="0" min="0" oninput="calculateArchive()">
-        </div>
-        <div class="input-group">
-            <label>Neural Tracker Cameras</label>
-            <input type="number" id="neuralCamQty" value="0" min="0" oninput="calculateArchive()">
-        </div>
-        <div class="input-group">
-            <label>Facial Recognition Cameras</label>
-            <input type="number" id="faceCamQty" value="0" min="0" oninput="calculateArchive()">
-        </div>
-        <div class="input-group">
-            <label>LPR Cameras</label>
-            <input type="number" id="lprCamQty" value="0" min="0" oninput="calculateArchive()">
-        </div>
+    <label>Basic Cameras</label>
+    <input type="number" id="camQty" value="0" min="0" oninput="calculateArchive()">
+</div>
+
+<div class="input-group">
+    <label>Neural Tracker Cameras</label>
+    <input type="number" id="neuralCamQty" value="0" disabled style="background-color: #f7fafc; cursor: not-allowed;">
+</div>
+
+<div class="input-group">
+    <label>Facial Recognition Cameras</label>
+    <input type="number" id="faceCamQty" value="0" min="0" oninput="calculateArchive()">
+</div>
+
+<div class="input-group">
+    <label>LPR Cameras</label>
+    <input type="number" id="lprCamQty" value="0" min="0" oninput="calculateArchive()">
+</div>
 
         <input type="hidden" id="calcArchive">
         <input type="hidden" id="calcMeta">
@@ -225,78 +228,59 @@
     };
 
     function calculateArchive() {
-    // 1. Get the Basic Camera Quantity first to determine the Model
-    const basicQty = parseInt(document.getElementById('camQty').value) || 0;
     const modelDropdown = document.getElementById('modelSelect');
+    const basicQty = parseInt(document.getElementById('camQty').value) || 0;
 
-    // 2. AUTO-MODEL SELECTION LOGIC
-    let selectedModel = "";
-    if (basicQty > 0 && basicQty <= 16) {
-        selectedModel = "HAWK16";
-    } else if (basicQty > 16 && basicQty <= 32) {
-        selectedModel = "HAWK32";
-    } else if (basicQty > 32 && basicQty <= 64) {
-        selectedModel = "HAWK64";
-    } else if (basicQty > 64) {
-        selectedModel = "HAWK64"; // Fallback/Max limit
-    }
-
-    // Trigger Hardware Update if the model has changed
-    if (selectedModel !== "" && selectedModel !== modelDropdown.value) {
-        modelDropdown.value = selectedModel;
-        if (typeof updateStandardHardware === "function") {
-            updateStandardHardware();
-        }
-    }
-
-    // 3. Get remaining inputs
-    const model = modelDropdown.value;
-    // neuralQtyForMetadata comes from the hidden input for SSD math
-    const neuralQtyForMetadata = parseInt(document.getElementById('neuralCamQty').value) || 0;
+    // --- STEP 1: FORCE NEURAL TRACKER TO MATCH BASIC ---
+    // We update the actual input field so the user sees the change
+    document.getElementById('neuralCamQty').value = basicQty;
+    
+    // For our math variables:
+    const neuralQty = basicQty; 
     const faceQty = parseInt(document.getElementById('faceCamQty').value) || 0;
     const lprQty = parseInt(document.getElementById('lprCamQty').value) || 0;
-    
-    // 4. Storage Constants
+
+    // --- STEP 2: AUTO-MODEL SELECTION ---
+    let selectedModel = "";
+    if (basicQty > 0 && basicQty <= 16) selectedModel = "HAWK16";
+    else if (basicQty > 16 && basicQty <= 32) selectedModel = "HAWK32";
+    else if (basicQty > 32) selectedModel = "HAWK64";
+
+    if (selectedModel !== "" && selectedModel !== modelDropdown.value) {
+        modelDropdown.value = selectedModel;
+        if (typeof updateStandardHardware === "function") updateStandardHardware();
+    }
+
+    // --- STEP 3: CALCULATIONS ---
     const archivePerBasicCam = 711.92;
     const metadataPerSpecialCam = 37.90;
 
-    // 5. THE CALCULATIONS
-    // Archive (HDD) uses Basic Cameras
     const totalArchiveTB = (basicQty * archivePerBasicCam) / 1000;
     
-    // Metadata (SSD) uses the hidden Neural Tracker input field
-    const totalMetaGB = (neuralQtyForMetadata + faceQty + lprQty) * metadataPerSpecialCam;
+    // Metadata uses the auto-synced Neural Tracker count
+    const totalMetaGB = (neuralQty + faceQty + lprQty) * metadataPerSpecialCam;
 
-    // 6. RAID 10 Logic
+    // RAID 10 Logic
     const requiredRawTB = totalArchiveTB * 2;
     const availableSizes = [6, 8, 12, 22]; 
     let selectedQty = 0, selectedSize = 0;
 
-    if (totalArchiveTB > 0 && model !== "") {
-        // HAWK64 gets 8/6/4 options, HAWK16/32 get 4 options
-        let driveCountOptions = (model === "HAWK64") ? [8, 6, 4] : [4];
+    if (totalArchiveTB > 0) {
+        let driveCountOptions = (modelDropdown.value === "HAWK64") ? [8, 6, 4] : [4];
         let foundMatch = false;
-        
         for (let qty of driveCountOptions) {
             let bestSize = availableSizes.find(s => (s * qty) >= requiredRawTB);
             if (bestSize) {
-                selectedQty = qty; 
-                selectedSize = bestSize;
-                foundMatch = true; 
-                break; 
+                selectedQty = qty; selectedSize = bestSize;
+                foundMatch = true; break; 
             }
         }
-        if (!foundMatch) { 
-            selectedQty = (model === "HAWK64") ? 8 : 4; 
-            selectedSize = 22; 
-        }
+        if (!foundMatch) { selectedQty = (modelDropdown.value === "HAWK64") ? 8 : 4; selectedSize = 22; }
     }
 
-    // Update RAID Readonly Inputs
+    // Update UI
     document.getElementById('raidDisks').value = selectedQty;
     document.getElementById('raidSize').value = selectedSize;
-
-    // 7. UI UPDATES (The blue box)
     document.getElementById('dispArchive').innerText = totalArchiveTB.toFixed(2);
     document.getElementById('dispArchiveMark').innerText = (totalArchiveTB * 1.0997).toFixed(2);
 
@@ -308,14 +292,12 @@
         metaContainer.innerHTML = `<span id="dispMeta">${totalMetaGB.toFixed(2)}</span> GB <span class="calc-sub">(SSD marked capacity <span id="dispMetaMark">${(totalMetaGB * 1.105).toFixed(2)}</span> GB)</span>`;
     }
 
-    // 8. THE TABLE SYNC
-    // Shows the Basic Camera Qty in the License Table as requested
-    updateLicenseUI(basicQty, faceQty, lprQty);
+    // Sync Table UI (Shows Basic Qty in the Neural License Row)
+    updateLicenseUI(neuralQty, faceQty, lprQty);
 
     document.getElementById('calcArchive').value = totalArchiveTB;
     document.getElementById('calcMeta').value = totalMetaGB;
     
-    // Final External Updates
     if (typeof calculate === "function") calculate(); 
     if (typeof updateLabels === "function") updateLabels();
 }
